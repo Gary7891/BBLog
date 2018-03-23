@@ -1,14 +1,14 @@
 //
-//  ActivityModel.m
+//  ClientModel.m
 //  BBLog
 //
-//  Created by  Gary on 6/26/14.
+//  Created by Gary on 6/26/14.
 //  Copyright (c) 2014 TimeFace. All rights reserved.
 //
 
-#import "ActivityModel.h"
+#import "BBClientModel.h"
 
-@implementation ActivityModel
+@implementation BBClientModel
 
 +(NSString*)primaryKey {
     return @"ID";
@@ -25,15 +25,10 @@
     return @[@"ID"];
 }
 
+
 - (NSDictionary*)toDictionary {
     
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-    [dic setObject:self.activityName?:@"" forKey:@"type"];
-    [dic setObject:self.relatedData?:@"" forKey:@"refid"];
-    [dic setObject:[NSString stringWithFormat:@"%f",self.startMils] forKey:@"ctime"];
-    
-    return dic;
-    
+    return nil;
 }
 
 @end

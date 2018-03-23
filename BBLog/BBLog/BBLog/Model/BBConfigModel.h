@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ConfigModel : NSObject
+@interface BBConfigModel : NSObject
 
 
 @property (nonatomic, copy) NSString               *version;

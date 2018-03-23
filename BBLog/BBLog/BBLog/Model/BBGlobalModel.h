@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GlobalModel : NSObject
+@interface BBGlobalModel : NSObject
 
 /**
  *  Log服务器

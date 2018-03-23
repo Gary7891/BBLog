@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "BBLog"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "iOS日志采集和上传组件"
   s.homepage     = "https://git.tticar.com/pods/BBLog"
   s.license      = "Copyright (C) 2018 Gary, Inc.  All rights reserved."

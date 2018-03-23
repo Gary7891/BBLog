@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
-@interface TagModel : RLMObject
+@interface BBTagModel : RLMObject
 
 /**
  主键
@@ -24,4 +24,4 @@
 
 @end
 
-RLM_ARRAY_TYPE(TagModel);
+RLM_ARRAY_TYPE(BBTagModel);

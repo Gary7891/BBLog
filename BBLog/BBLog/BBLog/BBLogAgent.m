@@ -10,14 +10,14 @@
 #import "BBLogKeychain.h"
 
 //Model
-#import "ClientModel.h"
-#import "ActivityModel.h"
-#import "ErrorModel.h"
-#import "EventModel.h"
-#import "TagModel.h"
-#import "ReturnModel.h"
-#import "AppPageModel.h"
-#import "ConfigModel.h"
+#import "BBClientModel.h"
+#import "BBActivityModel.h"
+#import "BBErrorModel.h"
+#import "BBEventModel.h"
+#import "BBTagModel.h"
+#import "BBReturnModel.h"
+#import "BBAppPageModel.h"
+#import "BBConfigModel.h"
 #import "NetWorkTools.h"
 
 #import "asl.h"
@@ -60,20 +60,33 @@ NSString * applicationDocumentsDirectory()
     
 }
 
-@property (nonatomic ,assign) ReportPolicyType reportPolicy;
-@property (nonatomic ,copy) NSString    *serverUrl;
-@property (nonatomic ,assign) BOOL isLogEnabled;
-@property (nonatomic ,assign) BOOL isCrashReportEnabled;
-@property (nonatomic ,copy) NSString *appKey;
-@property (nonatomic ,copy) NSString *updateOnlyWifi;
-@property (nonatomic ,copy) NSString *sessionmillis;
-@property (nonatomic ,assign) BOOL isOnLineConfig;
-@property (nonatomic ,strong) NSDate *startDate;
-@property (nonatomic ,copy) NSString *sessionId;
-@property (nonatomic ,copy) NSString *pageName;
-@property (nonatomic ,strong) NSDate *sessionStopDate;
+@property (nonatomic ,assign) ReportPolicyType             reportPolicy;
 
-@property (nonatomic, strong)ConfigModel  *configModel;
+@property (nonatomic ,copy) NSString                       *serverUrl;
+
+@property (nonatomic ,assign) BOOL                         isLogEnabled;
+
+@property (nonatomic ,assign) BOOL                         isCrashReportEnabled;
+
+@property (nonatomic ,copy) NSString                       *appKey;
+
+@property (nonatomic ,copy) NSString                       *updateOnlyWifi;
+
+@property (nonatomic ,copy) NSString                       *sessionmillis;
+
+@property (nonatomic ,assign) BOOL                         isOnLineConfig;
+
+@property (nonatomic ,strong) NSDate                       *startDate;
+
+@property (nonatomic ,copy) NSString                       *sessionId;
+
+@property (nonatomic ,copy) NSString                       *pageName;
+
+@property (nonatomic ,strong) NSDate                       *sessionStopDate;
+
+@property (nonatomic, strong) NSString                     *relatedData;
+
+@property (nonatomic, strong)BBConfigModel                 *configModel;
 
 @end
 
@@ -136,7 +149,7 @@ void UncaughtExceptionHandler(NSException * exception)
 }
 
 +(void)ConfigWith:(NSDictionary *)configDic {
-    ConfigModel *configModel = [[ConfigModel alloc]init];
+    BBConfigModel *configModel = [[BBConfigModel alloc]init];
     
     
     configModel.version = [configDic objectForKey:@"x-version"];
@@ -159,7 +172,6 @@ void UncaughtExceptionHandler(NSException * exception)
 {
     [[BBLogAgent sharedLogAgent] initWithAppKey:appKey reportPolicy:ReportPolicyBatch serverURL:serverURL];
 
-    
 }
 
 +(void)startWithAppKey:(NSString*)appKey reportPolicy:(ReportPolicyType)reportPolicy serverURL:(NSString*)serverURL
@@ -202,7 +214,7 @@ void UncaughtExceptionHandler(NSException * exception)
     if (!self.sessionId.length) {
         self.sessionId = @"B534833A9FC6B34644377282EC53CCE1";
     }
-    AppPageModel *pageModel = [[AppPageModel alloc]init];
+    BBAppPageModel *pageModel = [[BBAppPageModel alloc]init];
     pageModel.startMils = [[NSDate date] timeIntervalSince1970];
     pageModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
     pageModel.sessionId = self.sessionId;
@@ -223,8 +235,8 @@ void UncaughtExceptionHandler(NSException * exception)
     [self performSelectorInBackground:@selector(archiveClientData) withObject:nil];
 }
 
-- (ClientModel*)getCurrentClentModel {
-    ClientModel *model = [[ClientModel allObjects] sortedResultsUsingKeyPath:@"time" ascending:NO].firstObject;
+- (BBClientModel*)getCurrentClentModel {
+    BBClientModel *model = [[BBClientModel allObjects] sortedResultsUsingKeyPath:@"time" ascending:NO].firstObject;
     if (model) {
         return model;
     }
@@ -238,10 +250,25 @@ void UncaughtExceptionHandler(NSException * exception)
     [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(recordStartTime:) withObject:pageName];
 }
 
++ (void)startTracPage:(NSString *)pageName relatedData:(NSString *)data {
+    
+}
+
+- (void)recordStartTime:(NSString*) pageName relatedData:(NSString*)data {
+    @autoreleasepool {
+        self.pageName = [[NSString alloc] initWithString:pageName];
+        self.relatedData = data?:@"";
+        NSDate *pageStartDate = [[NSDate date] copy];
+        [[NSUserDefaults standardUserDefaults] setObject:pageStartDate forKey:pageName];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 -(void)recordStartTime:(NSString*) pageName
 {
     @autoreleasepool {
         self.pageName = [[NSString alloc] initWithString:pageName];
+        self.relatedData = @"";
         NSDate *pageStartDate = [[NSDate date] copy];
         [[NSUserDefaults standardUserDefaults] setObject:pageStartDate forKey:pageName];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -269,8 +296,8 @@ void UncaughtExceptionHandler(NSException * exception)
 //    }
     
     _sessionStopDate = [NSDate date];
-    RLMResults<AppPageModel*> *result = [AppPageModel objectsWhere:@"sessionId = %@",self.sessionId];
-    AppPageModel *pageModel = result.firstObject;
+    RLMResults<BBAppPageModel*> *result = [BBAppPageModel objectsWhere:@"sessionId = %@",self.sessionId];
+    BBAppPageModel *pageModel = result.firstObject;
     RLMRealm *realm = [RLMRealm defaultRealm];
     [realm transactionWithBlock:^{
         if (pageModel) {
@@ -301,7 +328,7 @@ void UncaughtExceptionHandler(NSException * exception)
         if(sessionStopInterval + 0.0000001 > 30)
         {
             self.sessionId = [self md5:sessionId];
-            AppPageModel *pageModel = [[AppPageModel alloc]init];
+            BBAppPageModel *pageModel = [[BBAppPageModel alloc]init];
             pageModel.startMils = [[NSDate date] timeIntervalSince1970];
             pageModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
             pageModel.sessionId = self.sessionId;
@@ -389,7 +416,7 @@ void UncaughtExceptionHandler(NSException * exception)
         {
             debug_NSLog(@"save error log");
         }
-        ErrorModel *errorModel = [[ErrorModel alloc] init];
+        BBErrorModel *errorModel = [[BBErrorModel alloc] init];
         errorModel.stackTrace = stackTrace;
         errorModel.appkey = self.appKey;
         errorModel.version = [self getVersion];
@@ -409,8 +436,9 @@ void UncaughtExceptionHandler(NSException * exception)
 {
     @autoreleasepool
     {
-        ActivityModel *activityModel = [[ActivityModel alloc] init];
+        BBActivityModel *activityModel = [[BBActivityModel alloc] init];
         activityModel.sessionId = self.sessionId;
+        activityModel.relatedData = self.relatedData;
         NSDate *pageStartDate = [[NSUserDefaults standardUserDefaults] objectForKey:currentPageName];
         if(pageStartDate!=nil)
         {
@@ -446,7 +474,7 @@ void UncaughtExceptionHandler(NSException * exception)
         });
         if(_isLogEnabled)
         {
-            debug_NSLog(@"Activity Log array size %lu",(unsigned long)[ActivityModel allObjects].count);
+            debug_NSLog(@"Activity Log array size %lu",(unsigned long)[BBActivityModel allObjects].count);
         }
     }
 }
@@ -467,7 +495,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)postEvent:(NSString *)eventId
 {
-    EventModel *eventModel =[[EventModel alloc] init];
+    BBEventModel *eventModel =[[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
     eventModel.descriptionString = @"";
@@ -480,7 +508,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)postEvent:(NSString *)eventId relatedData:(NSString *)label
 {
-    EventModel *eventModel = [[EventModel alloc] init];
+    BBEventModel *eventModel = [[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.acc = 1;
@@ -494,7 +522,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)postEvent:(NSString *)eventId acc:(NSInteger)acc
 {
-    EventModel *eventModel = [[EventModel alloc] init];
+    BBEventModel *eventModel = [[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.acc = acc;
@@ -508,7 +536,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)postEvent:(NSString *)eventId relatedData:(NSString *)label acc:(NSInteger)acc
 {
-    EventModel *eventModel = [[EventModel alloc] init];
+    BBEventModel *eventModel = [[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.acc = acc;
@@ -520,7 +548,7 @@ void UncaughtExceptionHandler(NSException * exception)
 }
 
 +(void)postEvent:(NSString *)eventId relatedData:(NSString *)data index:(NSInteger)index {
-    EventModel *eventModel = [[EventModel alloc] init];
+    BBEventModel *eventModel = [[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.acc = 1;
@@ -534,7 +562,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)postTag:(NSString *)tag
 {
-    TagModel *tagModel = [[TagModel alloc] init];
+    BBTagModel *tagModel = [[BBTagModel alloc] init];
     tagModel.tags = tag;
     tagModel.productkey = [[BBLogAgent sharedLogAgent] appKey];
     tagModel.deviceid = [BBLogAgent getDeviceId];
@@ -545,19 +573,19 @@ void UncaughtExceptionHandler(NSException * exception)
 +(void)bindUserIdentifier:(NSString *)userToken
 {
     
-    ClientModel *clientModel = [[BBLogAgent sharedLogAgent] getCurrentClentModel];
+    BBClientModel *clientModel = [[BBLogAgent sharedLogAgent] getCurrentClentModel];
     clientModel.userId = userToken;
     [BBLogAgent sharedLogAgent].configModel.token = userToken;
     
 }
 
 
--(void) processEvent:(EventModel *)event
+-(void) processEvent:(BBEventModel *)event
 {
     [self performSelectorInBackground:@selector(postEventInBackGround:) withObject:event];
 }
 
--(void) processTag:(TagModel *)tag
+-(void) processTag:(BBTagModel *)tag
 {
     [self performSelectorInBackground:@selector(postTagInBackGround:) withObject:tag];
 }
@@ -568,42 +596,42 @@ void UncaughtExceptionHandler(NSException * exception)
 
         NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     
-        RLMResults<EventModel*> *eventResults = [EventModel objectsWhere:@"time < %f",currentTime];
+        RLMResults<BBEventModel*> *eventResults = [BBEventModel objectsWhere:@"time < %f",currentTime];
         NSMutableArray *eventArray = [[NSMutableArray alloc]init];
         for (int i = 0; i < eventResults.count; i++) {
-            EventModel *model = [eventResults objectAtIndex:i];
+            BBEventModel *model = [eventResults objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
             [eventArray addObject:dic];
         }
         
-        RLMResults<ActivityModel*> *activitResult = [ActivityModel objectsWhere:@"startMils < %f",currentTime];
+        RLMResults<BBActivityModel*> *activitResult = [BBActivityModel objectsWhere:@"startMils < %f",currentTime];
         NSMutableArray *activityLogArray = [[NSMutableArray alloc]init];
         for (int i = 0; i < activitResult.count; i++) {
-            ActivityModel *model = [activitResult objectAtIndex:i];
+            BBActivityModel *model = [activitResult objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
             [activityLogArray addObject:dic];
         }
         
-        RLMResults<ErrorModel*> *errorResult = [ErrorModel objectsWhere:@"time < %f",currentTime];
+        RLMResults<BBErrorModel*> *errorResult = [BBErrorModel objectsWhere:@"time < %f",currentTime];
         NSMutableArray *errorLogArray = [[NSMutableArray alloc]init];
         for (int i = 0; i < errorResult.count; i++) {
-            ErrorModel *model = [errorResult objectAtIndex:i];
+            BBErrorModel *model = [errorResult objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
             [errorLogArray addObject:dic];
         }
         
-        RLMResults<ClientModel*> *clientResult = [ClientModel objectsWhere:@"time < %f",currentTime];
+        RLMResults<BBClientModel*> *clientResult = [BBClientModel objectsWhere:@"time < %f",currentTime];
         NSMutableArray *clientDataArray = [[NSMutableArray alloc]init];
         for (int i = 0; i < clientResult.count; i++) {
-            ClientModel *model = [clientResult objectAtIndex:i];
+            BBClientModel *model = [clientResult objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
             [clientDataArray addObject:dic];
         }
         
-        RLMResults<TagModel*> *tagResult = [TagModel allObjects];
+        RLMResults<BBTagModel*> *tagResult = [BBTagModel allObjects];
         NSMutableArray *tagArray = [[NSMutableArray alloc]init];
         for (int i = 0; i < tagResult.count; i++) {
-            TagModel *model = [tagResult objectAtIndex:i];
+            BBTagModel *model = [tagResult objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
             [tagArray addObject:dic];
         }
@@ -635,7 +663,7 @@ void UncaughtExceptionHandler(NSException * exception)
                 debug_NSLog(@"Post Archive Logs");
             }
             
-            ReturnModel *returnModel = [[NetWorkTools sharedNetWork] postAllLogs:requestDic];
+            BBReturnModel *returnModel = [[NetWorkTools sharedNetWork] postAllLogs:requestDic];
             
             if (returnModel.evnetSuccess) {
                 RLMRealm *realm = [RLMRealm defaultRealm];
@@ -822,10 +850,10 @@ void UncaughtExceptionHandler(NSException * exception)
 -(NSMutableArray *)getArchiveEvent:(NSTimeInterval)currentTime
 {
     
-    RLMResults<EventModel*> *eventResults = [EventModel objectsWhere:@"time < %f",currentTime];
+    RLMResults<BBEventModel*> *eventResults = [BBEventModel objectsWhere:@"time < %f",currentTime];
     NSMutableArray *eventArray = [[NSMutableArray alloc]init];
     for (int i = 0; i < eventResults.count; i++) {
-        EventModel *model = [eventResults objectAtIndex:i];
+        BBEventModel *model = [eventResults objectAtIndex:i];
         [eventArray addObject:model];
     }
     return eventArray;
@@ -833,10 +861,10 @@ void UncaughtExceptionHandler(NSException * exception)
 
 -(NSMutableArray *)getArchiveTag
 {
-    RLMResults<TagModel*> *tagResult = [TagModel allObjects];
+    RLMResults<BBTagModel*> *tagResult = [BBTagModel allObjects];
     NSMutableArray *tagArray = [[NSMutableArray alloc]init];
     for (int i = 0; i < tagResult.count; i++) {
-        TagModel *model = [tagResult objectAtIndex:i];
+        BBTagModel *model = [tagResult objectAtIndex:i];
         [tagArray addObject:model];
     }
     return tagArray;
@@ -845,10 +873,10 @@ void UncaughtExceptionHandler(NSException * exception)
 
 -(NSMutableArray *)getArchiveActivityLog:(NSTimeInterval)currentTime
 {
-    RLMResults<ActivityModel*> *activitResult = [ActivityModel objectsWhere:@"startMils < %f",currentTime];
+    RLMResults<BBActivityModel*> *activitResult = [BBActivityModel objectsWhere:@"startMils < %f",currentTime];
     NSMutableArray *activityLogArray = [[NSMutableArray alloc]init];
     for (int i = 0; i < activitResult.count; i++) {
-        ActivityModel *model = [activitResult objectAtIndex:i];
+        BBActivityModel *model = [activitResult objectAtIndex:i];
         [activityLogArray addObject:model];
     }
     return activityLogArray;
@@ -856,20 +884,20 @@ void UncaughtExceptionHandler(NSException * exception)
 
 -(NSMutableArray *)getArchiveErrorLog:(NSTimeInterval)currentTime
 {
-    RLMResults<ErrorModel*> *errorResult = [ErrorModel objectsWhere:@"time < %f",currentTime];
+    RLMResults<BBErrorModel*> *errorResult = [BBErrorModel objectsWhere:@"time < %f",currentTime];
     NSMutableArray *errorLogArray = [[NSMutableArray alloc]init];
     for (int i = 0; i < errorResult.count; i++) {
-        ErrorModel *model = [errorResult objectAtIndex:i];
+        BBErrorModel *model = [errorResult objectAtIndex:i];
         [errorLogArray addObject:model];
     }
     return errorLogArray;
 }
 
 
--(void)postEventInBackGround:(EventModel *)event
+-(void)postEventInBackGround:(BBEventModel *)event
 {
     @autoreleasepool {
-        ReturnModel *ret = [[NetWorkTools sharedNetWork] postEvent:_appKey event:event];
+        BBReturnModel *ret = [[NetWorkTools sharedNetWork] postEvent:_appKey event:event];
         if (ret.status < 0)
         {
             //上传失败，存入数据库
@@ -881,10 +909,10 @@ void UncaughtExceptionHandler(NSException * exception)
     }
 }
 
--(void)postTagInBackGround:(TagModel *)tag
+-(void)postTagInBackGround:(BBTagModel *)tag
 {
     @autoreleasepool {
-        ReturnModel *ret = [[NetWorkTools sharedNetWork] postTag:_appKey tag:tag];
+        BBReturnModel *ret = [[NetWorkTools sharedNetWork] postTag:_appKey tag:tag];
         if (ret.status<0)
         {
             //上传失败，存入数据库
@@ -903,7 +931,7 @@ void UncaughtExceptionHandler(NSException * exception)
 -(void)archiveClientData
 {
     
-    ClientModel *clientModel = [[BBLogAgent sharedLogAgent] getDeviceInfo];
+    BBClientModel *clientModel = [[BBLogAgent sharedLogAgent] getDeviceInfo];
     clientModel.time = [[NSDate date] timeIntervalSince1970];
     clientModel.version = self.configModel.version;
     clientModel.userId = self.configModel.token;
@@ -937,17 +965,17 @@ void UncaughtExceptionHandler(NSException * exception)
     
 }
 
--(void)processClientData:(ClientModel *)clientModel
+-(void)processClientData:(BBClientModel *)clientModel
 {
     [self performSelector:@selector(postClientDataInBackground:) withObject:clientModel];
 }
 
 -(NSMutableArray *)getArchiveClientData:(NSTimeInterval)currentTime
 {
-    RLMResults<ClientModel*> *clientResult = [ClientModel objectsWhere:@"time < %f",currentTime];
+    RLMResults<BBClientModel*> *clientResult = [BBClientModel objectsWhere:@"time < %f",currentTime];
     NSMutableArray *clientDataArray = [[NSMutableArray alloc]init];
     for (int i = 0; i < clientResult.count; i++) {
-        ClientModel *model = [clientResult objectAtIndex:i];
+        BBClientModel *model = [clientResult objectAtIndex:i];
         [clientDataArray addObject:model];
     }
     return clientDataArray;
@@ -955,7 +983,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
 
 
--(void)archiveEvent:(EventModel *)eventModel
+-(void)archiveEvent:(BBEventModel *)eventModel
 {
     if (self.reportPolicy == ReportPolicyBatch) {
         RLMRealm *realm = [RLMRealm defaultRealm];
@@ -969,7 +997,7 @@ void UncaughtExceptionHandler(NSException * exception)
     }
 }
 
--(void)archiveTag:(TagModel *)tag
+-(void)archiveTag:(BBTagModel *)tag
 {
     NSMutableArray *mTagArray;
     if (self.reportPolicy == ReportPolicyBatch) {
@@ -997,9 +1025,9 @@ void UncaughtExceptionHandler(NSException * exception)
     return appVersion;
 }
 
--(ClientModel *)getDeviceInfo
+-(BBClientModel *)getDeviceInfo
 {
-    ClientModel  *clientModel = [[ClientModel alloc] init];
+    BBClientModel  *clientModel = [[BBClientModel alloc] init];
     clientModel.platform = [[UIDevice currentDevice] systemName];
     clientModel.moduleName = [self machineName];
     clientModel.deviceName = [[UIDevice currentDevice] model];
@@ -1068,11 +1096,11 @@ void UncaughtExceptionHandler(NSException * exception)
     
 }
 
--(void)postClientDataInBackground:(ClientModel *)clientModel
+-(void)postClientDataInBackground:(BBClientModel *)clientModel
 {
     @autoreleasepool {
         //[self isWiFiAvailable];
-        ReturnModel *ret = [[NetWorkTools sharedNetWork] postClient:_appKey deviceInfo:clientModel];
+        BBReturnModel *ret = [[NetWorkTools sharedNetWork] postClient:_appKey deviceInfo:clientModel];
         
         if(ret.status >0)
         {
@@ -1111,7 +1139,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         {
             debug_NSLog(@"Post error log realtime");
         }
-        ErrorModel *errorModel = [[ErrorModel alloc] init];
+        BBErrorModel *errorModel = [[BBErrorModel alloc] init];
         errorModel.stackTrace = stackTrace;
         errorModel.appkey = self.appKey;
         errorModel.version = [self getVersion];
@@ -1119,7 +1147,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         errorModel.activity = [[NSBundle mainBundle] bundleIdentifier];
         errorModel.osVersion = [[UIDevice currentDevice] systemVersion];
         errorModel.deviceID = [BBLogAgent getDeviceId];
-        ReturnModel *ret = [[NetWorkTools sharedNetWork] postErrorLog:_appKey errorLog:errorModel];
+        BBReturnModel *ret = [[NetWorkTools sharedNetWork] postErrorLog:_appKey errorLog:errorModel];
         if(ret.status<0)
         {
             [self saveErrorLog:stackTrace];
@@ -1182,7 +1210,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 +(NSString *)getDeviceId
 {
-    ClientModel *model = [[ClientModel allObjects] sortedResultsUsingKeyPath:@"time" ascending:NO].firstObject;
+    BBClientModel *model = [[BBClientModel allObjects] sortedResultsUsingKeyPath:@"time" ascending:NO].firstObject;
     if (model.deviceId) {
         return model.deviceId;
     }else {

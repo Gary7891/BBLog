@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
-@interface ClientModel : RLMObject
+@interface BBClientModel : RLMObject
 
 /**
  主键
@@ -78,5 +78,5 @@
 
 @end
 
-RLM_ARRAY_TYPE(ClientModel)
+RLM_ARRAY_TYPE(BBClientModel)
 

@@ -6,9 +6,9 @@
 //  Copyright © 2018 czy. All rights reserved.
 //
 
-#import "ConfigModel.h"
+#import "BBConfigModel.h"
 
-@implementation ConfigModel
+@implementation BBConfigModel
 
 - (NSDictionary*)headerDictionary {
     

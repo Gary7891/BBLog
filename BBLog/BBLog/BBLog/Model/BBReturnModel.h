@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ReturnModel : NSObject
+@interface BBReturnModel : NSObject
 
 @property (nonatomic ,assign) int      status;
 @property (nonatomic ,copy  ) NSString *info;

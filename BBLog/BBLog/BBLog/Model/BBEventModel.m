@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 TimeFace. All rights reserved.
 //
 
-#import "EventModel.h"
+#import "BBEventModel.h"
 //#import <objc/runtime.h>
 //#import <objc/message.h>
 
-@implementation EventModel
+@implementation BBEventModel
 
 
 +(NSString*)primaryKey {

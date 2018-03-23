@@ -27,11 +27,11 @@
 }
 
 
-- (ReturnModel *) postClient:(NSString *) appkey deviceInfo:(ClientModel *) clientModel
+- (BBReturnModel *) postClient:(NSString *) appkey deviceInfo:(BBClientModel *) clientModel
 {
     @autoreleasepool {
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"cdLog"];
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSDictionary *requestDictionary = [clientModel toDictionary];
         
         NSArray *array = @[requestDictionary];
@@ -51,7 +51,7 @@
     }
 }
 
-- (ReturnModel *) postUsingTime:(NSString *) appkey
+- (BBReturnModel *) postUsingTime:(NSString *) appkey
                   sessionMills:(NSString *)sessionMills
                      startMils:(NSString*)startMils
                        endMils:(NSString*)endMils
@@ -62,7 +62,7 @@
     debug_NSLog(@"version %@",version);
     @autoreleasepool {
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"pvLog"];
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSMutableDictionary *requestDictionary = [[NSMutableDictionary alloc] init];
         [requestDictionary setObject:sessionMills forKey:@"session_id"];
         [requestDictionary setObject:startMils forKey:@"start_millis"];
@@ -89,12 +89,12 @@
     }
 }
 
-- (ReturnModel *) postArchiveLogs:(NSMutableDictionary *) archiveLogs
+- (BBReturnModel *) postArchiveLogs:(NSMutableDictionary *) archiveLogs
 {
     @autoreleasepool {
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"allLog"];
         debug_NSLog(@"url = %@",url);
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSData *data = [self sendData:url data:archiveLogs];
         NSError *error = nil;
         if (!data) {
@@ -114,11 +114,11 @@
 
 
 
-- (ReturnModel *) postErrorLog:(NSString *) appkey errorLog:(ErrorModel *) errorModel
+- (BBReturnModel *) postErrorLog:(NSString *) appkey errorLog:(BBErrorModel *) errorModel
 {
     @autoreleasepool {
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"erLog"];
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSDictionary *requestDictionary = [errorModel toDictionary];
         NSArray *array = @[requestDictionary];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithDictionary:@{@"errorLog":array}];
@@ -136,11 +136,11 @@
     }
 }
 
-- (ReturnModel *) postEvent:(NSString *) appkey event:(EventModel *) eventModel {
+- (BBReturnModel *) postEvent:(NSString *) appkey event:(BBEventModel *) eventModel {
     @autoreleasepool {
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"evLog"];
         debug_NSLog(@"post event url = %@",url);
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSDictionary *requestDictionary = [eventModel toDictionary];
         NSArray *array = @[requestDictionary];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithDictionary:@{@"eventArray" : array}];
@@ -158,12 +158,12 @@
     }
 }
 
-- (ReturnModel *) postTag:(NSString *) appkey tag:(TagModel *) tagModel {
+- (BBReturnModel *) postTag:(NSString *) appkey tag:(BBTagModel *) tagModel {
     @autoreleasepool {
         
         NSString* url = [NSString stringWithFormat:@"%@%@",_kServerUrl,@"/ums/postTag"];
         
-        ReturnModel *ret = [[ReturnModel alloc] init];
+        BBReturnModel *ret = [[BBReturnModel alloc] init];
         NSDictionary *requestDictionary = [tagModel toDictionary];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc]initWithDictionary:requestDictionary];
         NSData *data = [self sendData:url data:dic];
@@ -269,7 +269,7 @@
 	
 }
 
-- (ReturnModel*)postAllLogs:(NSMutableDictionary*)allLogs {
+- (BBReturnModel*)postAllLogs:(NSMutableDictionary*)allLogs {
     
     __block BOOL eventSuccess = YES;
     __block BOOL activitySuccess = YES;
@@ -302,7 +302,7 @@
         dispatch_semaphore_signal(semaphore_top);
     });
     dispatch_semaphore_wait(semaphore_top, DISPATCH_TIME_FOREVER);
-    ReturnModel *model = [[ReturnModel alloc]init];
+    BBReturnModel *model = [[BBReturnModel alloc]init];
     model.evnetSuccess = eventSuccess;
     model.activitySuccess = activitySuccess;
     return model;

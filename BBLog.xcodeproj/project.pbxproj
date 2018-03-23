@@ -20,13 +20,13 @@
 		4E487CC6205A5FDA00335201 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CC5205A5FDA00335201 /* main.m */; };
 		4E487CD0205A5FDA00335201 /* BBLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CCF205A5FDA00335201 /* BBLogTests.m */; };
 		4E487CDB205A5FDA00335201 /* BBLogUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CDA205A5FDA00335201 /* BBLogUITests.m */; };
-		4E487D13205A605500335201 /* ActivityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CEE205A605500335201 /* ActivityModel.m */; };
-		4E487D14205A605500335201 /* ClientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF3205A605500335201 /* ClientModel.m */; };
-		4E487D15205A605500335201 /* ErrorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF4205A605500335201 /* ErrorModel.m */; };
-		4E487D16205A605500335201 /* ReturnModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF5205A605500335201 /* ReturnModel.m */; };
-		4E487D17205A605500335201 /* GlobalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF7205A605500335201 /* GlobalModel.m */; };
-		4E487D18205A605500335201 /* EventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF8205A605500335201 /* EventModel.m */; };
-		4E487D19205A605500335201 /* TagModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF9205A605500335201 /* TagModel.m */; };
+		4E487D13205A605500335201 /* BBActivityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CEE205A605500335201 /* BBActivityModel.m */; };
+		4E487D14205A605500335201 /* BBClientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF3205A605500335201 /* BBClientModel.m */; };
+		4E487D15205A605500335201 /* BBErrorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF4205A605500335201 /* BBErrorModel.m */; };
+		4E487D16205A605500335201 /* BBReturnModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF5205A605500335201 /* BBReturnModel.m */; };
+		4E487D17205A605500335201 /* BBGlobalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF7205A605500335201 /* BBGlobalModel.m */; };
+		4E487D18205A605500335201 /* BBEventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF8205A605500335201 /* BBEventModel.m */; };
+		4E487D19205A605500335201 /* BBTagModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CF9205A605500335201 /* BBTagModel.m */; };
 		4E487D1A205A605500335201 /* BBLogAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CFA205A605500335201 /* BBLogAgent.m */; };
 		4E487D1B205A605500335201 /* LGZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CFE205A605500335201 /* LGZIP.m */; };
 		4E487D1C205A605500335201 /* NetWorkTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487CFF205A605500335201 /* NetWorkTools.m */; };
@@ -35,10 +35,9 @@
 		4E487D1F205A605500335201 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487D0C205A605500335201 /* CJSONDeserializer.m */; };
 		4E487D20205A605500335201 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487D0D205A605500335201 /* NSDictionary_JSONExtensions.m */; };
 		4E487D21205A605500335201 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E487D12205A605500335201 /* CJSONSerializer.m */; };
-		4E4B16E3205F9725002466BE /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16E2205F9725002466BE /* UserModel.m */; };
-		4E4B16E6205FB333002466BE /* AppPageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16E5205FB333002466BE /* AppPageModel.m */; };
+		4E4B16E6205FB333002466BE /* BBAppPageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16E5205FB333002466BE /* BBAppPageModel.m */; };
 		4E4B16E920609E7C002466BE /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16E820609E7C002466BE /* SecondViewController.m */; };
-		4E4B16EC2060EE7F002466BE /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16EB2060EE7F002466BE /* ConfigModel.m */; };
+		4E4B16EC2060EE7F002466BE /* BBConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4B16EB2060EE7F002466BE /* BBConfigModel.m */; };
 		CFF98A165C98DA097C0FBBC0 /* libPods-BBLog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB5CE01051A68DCCC8175A00 /* libPods-BBLog.a */; };
 /* End PBXBuildFile section */
 
@@ -91,20 +90,20 @@
 		4E487CDA205A5FDA00335201 /* BBLogUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBLogUITests.m; sourceTree = "<group>"; };
 		4E487CDC205A5FDA00335201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E487CEA205A605500335201 /* BBLogAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBLogAgent.h; sourceTree = "<group>"; };
-		4E487CEC205A605500335201 /* ClientModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientModel.h; sourceTree = "<group>"; };
-		4E487CED205A605500335201 /* ErrorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorModel.h; sourceTree = "<group>"; };
-		4E487CEE205A605500335201 /* ActivityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityModel.m; sourceTree = "<group>"; };
-		4E487CEF205A605500335201 /* ReturnModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReturnModel.h; sourceTree = "<group>"; };
-		4E487CF0205A605500335201 /* TagModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagModel.h; sourceTree = "<group>"; };
-		4E487CF1205A605500335201 /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
-		4E487CF2205A605500335201 /* GlobalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalModel.h; sourceTree = "<group>"; };
-		4E487CF3205A605500335201 /* ClientModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientModel.m; sourceTree = "<group>"; };
-		4E487CF4205A605500335201 /* ErrorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorModel.m; sourceTree = "<group>"; };
-		4E487CF5205A605500335201 /* ReturnModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReturnModel.m; sourceTree = "<group>"; };
-		4E487CF6205A605500335201 /* ActivityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityModel.h; sourceTree = "<group>"; };
-		4E487CF7205A605500335201 /* GlobalModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalModel.m; sourceTree = "<group>"; };
-		4E487CF8205A605500335201 /* EventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventModel.m; sourceTree = "<group>"; };
-		4E487CF9205A605500335201 /* TagModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagModel.m; sourceTree = "<group>"; };
+		4E487CEC205A605500335201 /* BBClientModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBClientModel.h; sourceTree = "<group>"; };
+		4E487CED205A605500335201 /* BBErrorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBErrorModel.h; sourceTree = "<group>"; };
+		4E487CEE205A605500335201 /* BBActivityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBActivityModel.m; sourceTree = "<group>"; };
+		4E487CEF205A605500335201 /* BBReturnModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBReturnModel.h; sourceTree = "<group>"; };
+		4E487CF0205A605500335201 /* BBTagModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTagModel.h; sourceTree = "<group>"; };
+		4E487CF1205A605500335201 /* BBEventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBEventModel.h; sourceTree = "<group>"; };
+		4E487CF2205A605500335201 /* BBGlobalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBGlobalModel.h; sourceTree = "<group>"; };
+		4E487CF3205A605500335201 /* BBClientModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBClientModel.m; sourceTree = "<group>"; };
+		4E487CF4205A605500335201 /* BBErrorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBErrorModel.m; sourceTree = "<group>"; };
+		4E487CF5205A605500335201 /* BBReturnModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBReturnModel.m; sourceTree = "<group>"; };
+		4E487CF6205A605500335201 /* BBActivityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBActivityModel.h; sourceTree = "<group>"; };
+		4E487CF7205A605500335201 /* BBGlobalModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBGlobalModel.m; sourceTree = "<group>"; };
+		4E487CF8205A605500335201 /* BBEventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBEventModel.m; sourceTree = "<group>"; };
+		4E487CF9205A605500335201 /* BBTagModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTagModel.m; sourceTree = "<group>"; };
 		4E487CFA205A605500335201 /* BBLogAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBLogAgent.m; sourceTree = "<group>"; };
 		4E487CFC205A605500335201 /* NetWorkTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetWorkTools.h; sourceTree = "<group>"; };
 		4E487CFD205A605500335201 /* LGZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGZIP.h; sourceTree = "<group>"; };
@@ -121,14 +120,12 @@
 		4E487D10205A605500335201 /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
 		4E487D11205A605500335201 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer.h; sourceTree = "<group>"; };
 		4E487D12205A605500335201 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
-		4E4B16E1205F9725002466BE /* UserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
-		4E4B16E2205F9725002466BE /* UserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
-		4E4B16E4205FB333002466BE /* AppPageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppPageModel.h; sourceTree = "<group>"; };
-		4E4B16E5205FB333002466BE /* AppPageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppPageModel.m; sourceTree = "<group>"; };
+		4E4B16E4205FB333002466BE /* BBAppPageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBAppPageModel.h; sourceTree = "<group>"; };
+		4E4B16E5205FB333002466BE /* BBAppPageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBAppPageModel.m; sourceTree = "<group>"; };
 		4E4B16E720609E7C002466BE /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		4E4B16E820609E7C002466BE /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
-		4E4B16EA2060EE7F002466BE /* ConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigModel.h; sourceTree = "<group>"; };
-		4E4B16EB2060EE7F002466BE /* ConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
+		4E4B16EA2060EE7F002466BE /* BBConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBConfigModel.h; sourceTree = "<group>"; };
+		4E4B16EB2060EE7F002466BE /* BBConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBConfigModel.m; sourceTree = "<group>"; };
 		D83ACF00025F9359BA529914 /* Pods-BBLog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BBLog.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BBLog/Pods-BBLog.debug.xcconfig"; sourceTree = "<group>"; };
 		EB5CE01051A68DCCC8175A00 /* libPods-BBLog.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BBLog.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -277,26 +274,24 @@
 		4E487CEB205A605500335201 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4E487CEC205A605500335201 /* ClientModel.h */,
-				4E487CF3205A605500335201 /* ClientModel.m */,
-				4E487CED205A605500335201 /* ErrorModel.h */,
-				4E487CF4205A605500335201 /* ErrorModel.m */,
-				4E487CF6205A605500335201 /* ActivityModel.h */,
-				4E487CEE205A605500335201 /* ActivityModel.m */,
-				4E487CEF205A605500335201 /* ReturnModel.h */,
-				4E487CF5205A605500335201 /* ReturnModel.m */,
-				4E487CF0205A605500335201 /* TagModel.h */,
-				4E487CF9205A605500335201 /* TagModel.m */,
-				4E487CF1205A605500335201 /* EventModel.h */,
-				4E487CF8205A605500335201 /* EventModel.m */,
-				4E487CF2205A605500335201 /* GlobalModel.h */,
-				4E487CF7205A605500335201 /* GlobalModel.m */,
-				4E4B16E1205F9725002466BE /* UserModel.h */,
-				4E4B16E2205F9725002466BE /* UserModel.m */,
-				4E4B16E4205FB333002466BE /* AppPageModel.h */,
-				4E4B16E5205FB333002466BE /* AppPageModel.m */,
-				4E4B16EA2060EE7F002466BE /* ConfigModel.h */,
-				4E4B16EB2060EE7F002466BE /* ConfigModel.m */,
+				4E487CEC205A605500335201 /* BBClientModel.h */,
+				4E487CF3205A605500335201 /* BBClientModel.m */,
+				4E487CED205A605500335201 /* BBErrorModel.h */,
+				4E487CF4205A605500335201 /* BBErrorModel.m */,
+				4E487CF6205A605500335201 /* BBActivityModel.h */,
+				4E487CEE205A605500335201 /* BBActivityModel.m */,
+				4E487CEF205A605500335201 /* BBReturnModel.h */,
+				4E487CF5205A605500335201 /* BBReturnModel.m */,
+				4E487CF0205A605500335201 /* BBTagModel.h */,
+				4E487CF9205A605500335201 /* BBTagModel.m */,
+				4E487CF1205A605500335201 /* BBEventModel.h */,
+				4E487CF8205A605500335201 /* BBEventModel.m */,
+				4E487CF2205A605500335201 /* BBGlobalModel.h */,
+				4E487CF7205A605500335201 /* BBGlobalModel.m */,
+				4E4B16E4205FB333002466BE /* BBAppPageModel.h */,
+				4E4B16E5205FB333002466BE /* BBAppPageModel.m */,
+				4E4B16EA2060EE7F002466BE /* BBConfigModel.h */,
+				4E4B16EB2060EE7F002466BE /* BBConfigModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -526,32 +521,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E4B16E6205FB333002466BE /* AppPageModel.m in Sources */,
+				4E4B16E6205FB333002466BE /* BBAppPageModel.m in Sources */,
 				4E487D1B205A605500335201 /* LGZIP.m in Sources */,
 				4E487D1A205A605500335201 /* BBLogAgent.m in Sources */,
 				4E4B16E920609E7C002466BE /* SecondViewController.m in Sources */,
-				4E487D15205A605500335201 /* ErrorModel.m in Sources */,
-				4E487D13205A605500335201 /* ActivityModel.m in Sources */,
+				4E487D15205A605500335201 /* BBErrorModel.m in Sources */,
+				4E487D13205A605500335201 /* BBActivityModel.m in Sources */,
 				4E1C9B7C20620BD400720EF4 /* LogGroup.m in Sources */,
 				4E487D1D205A605500335201 /* BBLogKeychain.m in Sources */,
-				4E487D17205A605500335201 /* GlobalModel.m in Sources */,
+				4E487D17205A605500335201 /* BBGlobalModel.m in Sources */,
 				4E1C9B7F20620BD400720EF4 /* LogClient.m in Sources */,
-				4E487D14205A605500335201 /* ClientModel.m in Sources */,
+				4E487D14205A605500335201 /* BBClientModel.m in Sources */,
 				4E487D1E205A605500335201 /* BBLogKeychainQuery.m in Sources */,
-				4E487D16205A605500335201 /* ReturnModel.m in Sources */,
+				4E487D16205A605500335201 /* BBReturnModel.m in Sources */,
 				4E1C9B7E20620BD400720EF4 /* NSData+MD5Digest.m in Sources */,
 				4E487D1C205A605500335201 /* NetWorkTools.m in Sources */,
-				4E487D18205A605500335201 /* EventModel.m in Sources */,
+				4E487D18205A605500335201 /* BBEventModel.m in Sources */,
 				4E487CBB205A5FDA00335201 /* ViewController.m in Sources */,
 				4E487CC6205A5FDA00335201 /* main.m in Sources */,
-				4E487D19205A605500335201 /* TagModel.m in Sources */,
+				4E487D19205A605500335201 /* BBTagModel.m in Sources */,
 				4E1C9B8020620BD400720EF4 /* NSString+Crypto.m in Sources */,
 				4E487D20205A605500335201 /* NSDictionary_JSONExtensions.m in Sources */,
 				4E1C9B7D20620BD400720EF4 /* Log.m in Sources */,
-				4E4B16EC2060EE7F002466BE /* ConfigModel.m in Sources */,
+				4E4B16EC2060EE7F002466BE /* BBConfigModel.m in Sources */,
 				4E487D21205A605500335201 /* CJSONSerializer.m in Sources */,
 				4E1C9B8120620BD400720EF4 /* NSData+GZIP.m in Sources */,
-				4E4B16E3205F9725002466BE /* UserModel.m in Sources */,
 				4E487D1F205A605500335201 /* CJSONDeserializer.m in Sources */,
 				4E487CB8205A5FDA00335201 /* AppDelegate.m in Sources */,
 			);

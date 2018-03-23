@@ -1,14 +1,14 @@
 //
-//  ClientModel.m
+//  AppPageModel.m
 //  BBLog
 //
-//  Created by Gary on 6/26/14.
-//  Copyright (c) 2014 TimeFace. All rights reserved.
+//  Created by Gary on 19/03/2018.
+//  Copyright © 2018 czy. All rights reserved.
 //
 
-#import "ClientModel.h"
+#import "BBAppPageModel.h"
 
-@implementation ClientModel
+@implementation BBAppPageModel
 
 +(NSString*)primaryKey {
     return @"ID";
@@ -23,12 +23,6 @@
 
 + (NSArray<NSString*>*)indexedProperties {
     return @[@"ID"];
-}
-
-
-- (NSDictionary*)toDictionary {
-    
-    return nil;
 }
 
 @end

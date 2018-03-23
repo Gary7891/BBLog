@@ -36,6 +36,13 @@ typedef enum {
 
 +(void)postEvent:(NSString *)eventId relatedData:(NSString *)data acc:(NSInteger)acc;
 
+/**
+ 点击事件记录
+
+ @param eventId 事件类型（ID）
+ @param data 相关的数据，比如广告ID
+ @param index 事件索引
+ */
 +(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSInteger)index;
 
 +(void)postTag:(NSString *)tag;
@@ -45,6 +52,14 @@ typedef enum {
 +(void)startTracPage:(NSString*)pageName;
 
 +(void)endTracPage:(NSString*)pageName;
+
+/**
+ 页面访问记录，开始进入页面
+
+ @param pageName 页面名称
+ @param data 相关的数据，如商品ID
+ */
++(void)startTracPage:(NSString *)pageName relatedData:(NSString*)data;
 
 // Check if the device jail broken
 + (BOOL)isJailbroken;

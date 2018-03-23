@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
-@interface ActivityModel : RLMObject
+@interface BBActivityModel : RLMObject
 
 
 
@@ -50,3 +50,5 @@
 - (NSDictionary*)toDictionary;
 
 @end
+
+RLM_ARRAY_TYPE(BBActivityModel);

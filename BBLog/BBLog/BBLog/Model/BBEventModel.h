@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
-@interface EventModel : RLMObject
+@interface BBEventModel : RLMObject
 
 
 /**
@@ -57,5 +57,6 @@
 - (NSDictionary*)toDictionary;
 
 
-
 @end
+
+RLM_ARRAY_TYPE(BBEventModel);

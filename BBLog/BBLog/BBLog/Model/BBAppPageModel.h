@@ -8,7 +8,7 @@
 
 #import <Realm/Realm.h>
 
-@interface AppPageModel : RLMObject
+@interface BBAppPageModel : RLMObject
 
 /**
  主键
@@ -41,4 +41,4 @@
 
 @end
 
-RLM_ARRAY_TYPE(AppPageModel);
+RLM_ARRAY_TYPE(BBAppPageModel);

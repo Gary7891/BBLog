@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GlobalModel.h"
-#import "ReturnModel.h"
+#import "BBGlobalModel.h"
+#import "BBReturnModel.h"
 
-#import "ClientModel.h"
-#import "ErrorModel.h"
-#import "TagModel.h"
-#import "ActivityModel.h"
-#import "EventModel.h"
-#import "ConfigModel.h"
+#import "BBClientModel.h"
+#import "BBErrorModel.h"
+#import "BBTagModel.h"
+#import "BBActivityModel.h"
+#import "BBEventModel.h"
+#import "BBConfigModel.h"
 
 #define kHeadDeviceId @"kHeadDeviceId"
 
@@ -31,9 +31,9 @@
 + (instancetype)sharedNetWork;
 
 
-- (ReturnModel *) postClient:(NSString *) appkey deviceInfo:(ClientModel *) clientModel;
+- (BBReturnModel *) postClient:(NSString *) appkey deviceInfo:(BBClientModel *) clientModel;
 
-- (ReturnModel *) postUsingTime:(NSString *) appkey
+- (BBReturnModel *) postUsingTime:(NSString *) appkey
                    sessionMills:(NSString *)sessionMills
                       startMils:(NSString*)startMils
                         endMils:(NSString*)endMils
@@ -41,20 +41,20 @@
                        activity:(NSString *) activity
                         version:(NSString *) version;
 
-- (ReturnModel *) postArchiveLogs:(NSMutableDictionary *) archiveLogs;
+- (BBReturnModel *) postArchiveLogs:(NSMutableDictionary *) archiveLogs;
 
-- (ReturnModel *) postErrorLog:(NSString *) appkey errorLog:(ErrorModel *) errorModel;
+- (BBReturnModel *) postErrorLog:(NSString *) appkey errorLog:(BBErrorModel *) errorModel;
 
-- (ReturnModel *) postEvent:(NSString *) appkey event:(EventModel *) eventModel;
+- (BBReturnModel *) postEvent:(NSString *) appkey event:(BBEventModel *) eventModel;
 
-- (ReturnModel *) postTag:(NSString *) appkey tag:(TagModel *) tagModel;
+- (BBReturnModel *) postTag:(NSString *) appkey tag:(BBTagModel *) tagModel;
 
-- (ReturnModel*)postAllLogs:(NSMutableDictionary*)allLogs;
+- (BBReturnModel*)postAllLogs:(NSMutableDictionary*)allLogs;
 
 
 @property (nonatomic, strong) NSString *kServerUrl;
 
-@property (nonatomic, strong) ConfigModel *configModel;
+@property (nonatomic, strong) BBConfigModel *configModel;
 
 
 @end

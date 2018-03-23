@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 TimeFace. All rights reserved.
 //
 
-#import "ErrorModel.h"
+#import "BBErrorModel.h"
 
-@implementation ErrorModel
+@implementation BBErrorModel
 
 +(NSString*)primaryKey {
     return @"ID";

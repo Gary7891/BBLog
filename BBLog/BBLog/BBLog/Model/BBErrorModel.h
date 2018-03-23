@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Realm/Realm.h>
 
-@interface ErrorModel : RLMObject
+@interface BBErrorModel : RLMObject
 
 /**
  主键
@@ -45,4 +45,4 @@
 - (NSDictionary*)toDictionary;
 
 @end
-RLM_ARRAY_TYPE(ErrorModel)
+RLM_ARRAY_TYPE(BBErrorModel)
