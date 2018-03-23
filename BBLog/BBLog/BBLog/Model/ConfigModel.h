@@ -24,7 +24,7 @@
 ////////////////////////////阿里云日志服务的一些参数////////////////////////////////////
 
 
-@property (nonatomic, copy) NSString               *endPont;
+@property (nonatomic, copy) NSString               *endPoint;
 @property (nonatomic, copy) NSString               *projectName;
 @property (nonatomic, copy) NSString               *logStoreName;
 

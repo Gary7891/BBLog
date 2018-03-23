@@ -144,6 +144,12 @@ void UncaughtExceptionHandler(NSException * exception)
     configModel.clientName = [configDic objectForKey:@"x-client"];
     configModel.deviceId = [configDic objectForKey:@"x-equCode"];
     configModel.platform = [configDic objectForKey:@"x-platform"];
+    configModel.endPoint = [configDic objectForKey:@"endPoint"];
+    configModel.projectName = [configDic objectForKey:@"projectName"];
+    configModel.logStoreName = [configDic objectForKey:@"logStoreName"];
+    configModel.sts_ak = [configDic objectForKey:@"sts_ak"];
+    configModel.sts_sk = [configDic objectForKey:@"sts_sk"];
+    configModel.sts_token = [configDic objectForKey:@"sts_token"];
     
     [BBLogAgent sharedLogAgent].configModel = configModel;
   
@@ -536,11 +542,12 @@ void UncaughtExceptionHandler(NSException * exception)
     [[BBLogAgent sharedLogAgent] archiveTag:tagModel];
 }
 
-+(void)bindUserIdentifier:(NSString *)userid
++(void)bindUserIdentifier:(NSString *)userToken
 {
     
     ClientModel *clientModel = [[BBLogAgent sharedLogAgent] getCurrentClentModel];
-    clientModel.userId = userid;
+    clientModel.userId = userToken;
+    [BBLogAgent sharedLogAgent].configModel.token = userToken;
     
 }
 
@@ -1015,12 +1022,6 @@ void UncaughtExceptionHandler(NSException * exception)
     NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
     clientModel.language = [languages objectAtIndex:0];
     
-    NSString *userid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userid"];
-    if (userid==nil) {
-        userid = @"";
-    }
-    
-    clientModel.userId = userid;
     
     CTTelephonyNetworkInfo*netInfo =[[CTTelephonyNetworkInfo alloc] init];
     CTCarrier*carrier =[netInfo subscriberCellularProvider];

@@ -335,7 +335,7 @@
     dispatch_semaphore_t semaphoreSend = dispatch_semaphore_create(0);
     __block BOOL success = YES;
     
-    LogClient *client = [[LogClient alloc]initWithApp:self.configModel.endPont
+    LogClient *client = [[LogClient alloc]initWithApp:self.configModel.endPoint
                                           accessKeyID:self.configModel.sts_ak
                                       accessKeySecret:self.configModel.sts_sk
                                           projectName:self.configModel.projectName];
