@@ -86,6 +86,8 @@ NSString * applicationDocumentsDirectory()
 
 @property (nonatomic, strong) NSString                     *relatedData;
 
+@property (nonatomic, strong) NSString                     *currentPageId;
+
 @property (nonatomic, strong)BBConfigModel                 *configModel;
 
 @end
@@ -152,17 +154,17 @@ void UncaughtExceptionHandler(NSException * exception)
     BBConfigModel *configModel = [[BBConfigModel alloc]init];
     
     
-    configModel.version = [configDic objectForKey:@"x-version"];
-    configModel.token = [configDic objectForKey:@"Authorization"];
-    configModel.clientName = [configDic objectForKey:@"x-client"];
-    configModel.deviceId = [configDic objectForKey:@"x-equCode"];
-    configModel.platform = [configDic objectForKey:@"x-platform"];
-    configModel.endPoint = [configDic objectForKey:@"endPoint"];
-    configModel.projectName = [configDic objectForKey:@"projectName"];
-    configModel.logStoreName = [configDic objectForKey:@"logStoreName"];
-    configModel.sts_ak = [configDic objectForKey:@"sts_ak"];
-    configModel.sts_sk = [configDic objectForKey:@"sts_sk"];
-    configModel.sts_token = [configDic objectForKey:@"sts_token"];
+    configModel.version = [configDic objectForKey:@"x-version"]?:@"";
+    configModel.token = [configDic objectForKey:@"Authorization"]?:@"";
+    configModel.clientName = [configDic objectForKey:@"x-client"]?:@"";
+    configModel.deviceId = [configDic objectForKey:@"x-equCode"]?:@"";
+    configModel.platform = [configDic objectForKey:@"x-platform"]?:@"";
+    configModel.endPoint = [configDic objectForKey:@"endPoint"]?:@"";
+    configModel.projectName = [configDic objectForKey:@"projectName"]?:@"";
+    configModel.logStoreName = [configDic objectForKey:@"logStoreName"]?:@"";
+    configModel.sts_ak = [configDic objectForKey:@"sts_ak"]?:@"";
+    configModel.sts_sk = [configDic objectForKey:@"sts_sk"]?:@"";
+    configModel.sts_token = [configDic objectForKey:@"sts_token"]?:@"";
     
     [BBLogAgent sharedLogAgent].configModel = configModel;
   
@@ -205,6 +207,7 @@ void UncaughtExceptionHandler(NSException * exception)
     
     
     self.startDate = [[NSDate date] copy];
+    self.currentPageId = @"";
     NSString *currentTime = [[NSString alloc] initWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
     NSString *sessionIdentifier = [[NSString alloc] initWithFormat:@"%@%@", currentTime, [BBLogAgent getDeviceId]
                                    ];
@@ -259,8 +262,35 @@ void UncaughtExceptionHandler(NSException * exception)
         self.pageName = [[NSString alloc] initWithString:pageName];
         self.relatedData = data?:@"";
         NSDate *pageStartDate = [[NSDate date] copy];
-        [[NSUserDefaults standardUserDefaults] setObject:pageStartDate forKey:pageName];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        RLMResults<BBActivityModel*> *activityResult = [BBActivityModel objectsWhere:@"ID = %@",self.currentPageId];
+        BBActivityModel *activityModel = nil;
+        if (activityResult.count && activityResult.firstObject) {
+            activityModel = activityResult.firstObject;
+            RLMRealm *realm = [RLMRealm defaultRealm];
+            [realm transactionWithBlock:^{
+                activityModel.relatedData = self.relatedData;
+            }];
+        }else {
+            activityModel = [[BBActivityModel alloc] init];
+            activityModel.sessionId = self.sessionId;
+            activityModel.relatedData = self.relatedData;
+            activityModel.startMils = [pageStartDate timeIntervalSince1970];
+            activityModel.activityName = self.pageName;
+            activityModel.version = [self getVersion];
+            activityModel.userToken = self.configModel.token;
+            if(activityModel)
+            {
+                debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
+            }
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                RLMRealm *realm = [RLMRealm defaultRealm];
+                [realm transactionWithBlock:^{
+                    [realm addObject: activityModel];
+                }];
+            });
+        }
     }
 }
 
@@ -270,8 +300,26 @@ void UncaughtExceptionHandler(NSException * exception)
         self.pageName = [[NSString alloc] initWithString:pageName];
         self.relatedData = @"";
         NSDate *pageStartDate = [[NSDate date] copy];
-        [[NSUserDefaults standardUserDefaults] setObject:pageStartDate forKey:pageName];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        BBActivityModel *activityModel = [[BBActivityModel alloc] init];
+        activityModel.sessionId = self.sessionId;
+        activityModel.relatedData = self.relatedData;
+        activityModel.startMils = [pageStartDate timeIntervalSince1970];
+        activityModel.activityName = self.pageName;
+        activityModel.version = [self getVersion];
+        activityModel.userToken = self.configModel.token;
+        if(activityModel)
+        {
+            debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            RLMRealm *realm = [RLMRealm defaultRealm];
+            [realm transactionWithBlock:^{
+                [realm addObject: activityModel];
+            }];
+        });
+        self.currentPageId = activityModel.ID;
     }
 }
 
@@ -436,42 +484,29 @@ void UncaughtExceptionHandler(NSException * exception)
 {
     @autoreleasepool
     {
-        BBActivityModel *activityModel = [[BBActivityModel alloc] init];
-        activityModel.sessionId = self.sessionId;
-        activityModel.relatedData = self.relatedData;
-        NSDate *pageStartDate = [[NSUserDefaults standardUserDefaults] objectForKey:currentPageName];
-        if(pageStartDate!=nil)
-        {
-            NSString *start_mils = [self getDateStr:pageStartDate];
-            activityModel.startMils = start_mils.doubleValue;
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:currentPageName];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        else
-        {
-            if(_isLogEnabled)
-            {
-                debug_NSLog(@"Page Start time not found. in saveActivityUsingTime pagename = %@",currentPageName);
-            }
+        RLMResults<BBActivityModel*> *activityResult = [BBActivityModel objectsWhere:@"ID = %@",self.currentPageId];
+        if (!activityResult.count) {
             return;
         }
-        activityModel.endMils = [self getCurrentTime].doubleValue;
+        BBActivityModel *activityModel = activityResult.firstObject;
+        if (!activityModel) {
+            return;
+        }
+        NSDate *pageStartDate = [NSDate dateWithTimeIntervalSince1970:activityModel.startMils];
+        double currentTimeinterval = [self getCurrentTime].doubleValue;
         NSTimeInterval duration = (-[pageStartDate timeIntervalSinceNow]);
-        activityModel.duration = duration;
-        activityModel.activityName = currentPageName;
-        activityModel.version = [self getVersion];
+        
         if(activityModel)
         {
             debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
         }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            RLMRealm *realm = [RLMRealm defaultRealm];
-            [realm transactionWithBlock:^{
-                [realm addObject: activityModel];
-            }];
-        });
+        NSString *sessionId = [self.sessionId copy];
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        [realm transactionWithBlock:^{
+            activityModel.endMils = currentTimeinterval;
+            activityModel.duration = duration;
+            activityModel.sessionId = sessionId;
+        }];
         if(_isLogEnabled)
         {
             debug_NSLog(@"Activity Log array size %lu",(unsigned long)[BBActivityModel allObjects].count);
@@ -503,6 +538,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.version = [[BBLogAgent sharedLogAgent] getVersion];
     eventModel.acc = 1;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -516,6 +552,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
     eventModel.descriptionString = @"";
     eventModel.relatedData = label;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
     
 }
@@ -530,6 +567,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.activityName =[[NSBundle mainBundle] bundleIdentifier];
     eventModel.descriptionString = @"";
     eventModel.relatedData = @"";
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
     
 }
@@ -544,6 +582,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.version = [[BBLogAgent sharedLogAgent] getVersion];
     eventModel.descriptionString = @"";
     eventModel.relatedData = label;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -557,6 +596,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.descriptionString = @"";
     eventModel.relatedData = data;
     eventModel.index = index;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -707,145 +747,7 @@ void UncaughtExceptionHandler(NSException * exception)
     }
 }
 
-- (void)groupSync2
-{
-//    dispatch_queue_t dispatchQueue = dispatch_queue_create("ted.queue.next1", DISPATCH_QUEUE_CONCURRENT);
-//    dispatch_queue_t globalQueue = dispatch_get_global_queue(0, 0);
-//    dispatch_group_t dispatchGroup = dispatch_group_create();
-//    dispatch_group_enter(dispatchGroup);
-//    dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
-//
-//        dispatch_async(globalQueue, ^{
-//
-//            sleep(5);
-//            NSLog(@"任务一完成");
-//            dispatch_group_leave(dispatchGroup);
-//        });
-//
-//    });
-//    dispatch_group_enter(dispatchGroup);
-//    dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
-//
-//        dispatch_async(globalQueue, ^{
-//
-//            sleep(8);
-//            NSLog(@"任务二完成");
-//            dispatch_group_leave(dispatchGroup);
-//        });
-//
-//    });
-//    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(){
-//        NSLog(@"notify：任务都完成了");
-//    });
-    
-    
-//    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-//    dispatch_group_t group = dispatch_group_create();
-//    dispatch_group_enter(group);
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//                sleep(5);
-//                NSLog(@"任务一完成");
-//                dispatch_group_leave(group);
-//            });
-//
-//        });
-//
-//
-//    });
-//    dispatch_group_enter(group);
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//                sleep(8);
-//                NSLog(@"任务二完成");
-//                dispatch_group_leave(group);
-//            });
-//
-//        });
-//
-//
-//
-//    });
-//    __block NSInteger count = 0;
-//    dispatch_group_notify(group, dispatch_get_global_queue(0, 0), ^{
-//
-//        NSLog(@"任务完成");
-//        count = 1;
-//        dispatch_semaphore_signal(semaphore);
-//    });
-//    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-//     NSLog(@"这是在线程组之外的 count = %@",@(count));
-    
-    
-    dispatch_semaphore_t semaphore_top = dispatch_semaphore_create(0);
-    
-    // 创建一个group
-    dispatch_group_t group = dispatch_group_create();
-    // 创建一个队列：全局队列
-//    dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
 
-    // 创建信号量，并且设置值为0
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-    // 将任务1添加到 group 中
-    dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
-
-        // 模拟异步网络请求
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                for (int i = 0; i < 1000; i++) {
-                    NSLog(@"任务1-----%d",i);
-                }
-
-                // 每次发送信号则 semaphore 会 +1
-                dispatch_semaphore_signal(semaphore);
-            });
-
-
-        });
-        // 由于是异步执行的，当 semaphore 等于 0，则会阻塞当前线程，直到执行了 block 的 dispatch_semaphore_signal，semaphore + 1，才会继续执行。
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-    });
-
-    // 将任务2添加到 group 中
-    dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
-
-        // 模拟异步网络请求
-
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                for (int i = 0; i < 100; i++) {
-                    NSLog(@"任务2-----%d",i);
-                }
-
-                dispatch_semaphore_signal(semaphore);
-            });
-
-
-        });
-
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    });
-
-    __block NSInteger count = 0;
-    dispatch_group_notify(group, dispatch_get_global_queue(0, 0), ^{
-        
-            NSLog(@"完成任务");
-            count = 1;
-        dispatch_semaphore_signal(semaphore_top);
-        
-    });
-
-    dispatch_semaphore_wait(semaphore_top, DISPATCH_TIME_FOREVER);
-    NSLog(@"这是在线程组之外的 count = %@",@(count));
-    
-
-}
 
 -(NSMutableArray *)getArchiveEvent:(NSTimeInterval)currentTime
 {
@@ -1147,6 +1049,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         errorModel.activity = [[NSBundle mainBundle] bundleIdentifier];
         errorModel.osVersion = [[UIDevice currentDevice] systemVersion];
         errorModel.deviceID = [BBLogAgent getDeviceId];
+        errorModel.userToken = self.configModel.token;
         BBReturnModel *ret = [[NetWorkTools sharedNetWork] postErrorLog:_appKey errorLog:errorModel];
         if(ret.status<0)
         {

@@ -47,6 +47,11 @@
  */
 @property NSString                 *relatedData;
 
+/**
+ 用户token或者ID
+ */
+@property NSString                 *userToken;
+
 - (NSDictionary*)toDictionary;
 
 @end

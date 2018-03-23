@@ -42,19 +42,15 @@
                                  @"endPoint"      : @"cn-shanghai.log.aliyuncs.com",
                                  @"projectName"   : @"tticar",
                                  @"logStoreName"  : @"store-test",
-                                 @"sts_ak"        : @"STS.HLJXEu6x7iapCkrCWpaaoHpH7",
-                                 @"sts_sk"        : @"4HPUbGDm5idFZRLmTRutSvL2CrykXcKbSnnzfwMNkJTR",
-                                 @"sts_token"     : @"CAISgQJ1q6Ft5B2yfSjIqY//E//B26cW3qObQU3Dp1clbe5Dp7Xj1Tz2IH1NdHBuBO4bvvswnWtU6PkelqVoRoReREvCKM1565kPZOMZ7EaF6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmsP3gnpPGskOB0AOilr5OnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwr1fwdp2qZ44HCXAAKv0vZb/Cq+9l+MQl9Yac6BqRNqvTmkvx0oOvXmpQSMZmR4wPDOhqAATdE9/Aq8EUNa+PjLsatPa6FW6wKNZpT3tARAN00R+uaqMGUXwPG1RwIBEWyotg5GlQrAB40/A3340Nj/eMdI6oL2vbB9VGNeKaWleuVB9ZCbE65KiFJ3rH/ihenXO3bo/RdkkERSW9f5R+O3CDzpwmwMFTJM93OsRGQ/W67UCO/"
+                                 @"sts_ak"        : @"STS.L1mLqrwSfaTuL9MQrDHnxCmay",
+                                 @"sts_sk"        : @"8VkVdkYMQkdzzomX8niR6pVrWf2kZZP72e4aCNVJjZGR",
+                                 @"sts_token"     : @"CAISgQJ1q6Ft5B2yfSjIrfLYB8vGmoxH1paeTh/8tXIRROFUrKjKmzz2IH1NdHBuBO4bvvswnWtU6PkelqVoRoReREvCKM1565kPUf4Lh0eF6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmsP3gnpPGskOB0AOilr5OnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwr1fwdp2qZ44HCXAAKv0vZb/Cq+9l+MQl9Yac6BqRNqvTmkvx0oOvXmpQSMZmR4wPDOhqAAYzjUnSjvUqsQWciY1zQtehY6+X8PtVmjs51e8s81Ulh3JzEGu8U7kCSWAdUXTAufW5k3K38ERyKp3xd6HBqjq6rHyxV4sKiVeddVpMbMglYcEbBJuchTrR2gDv6MPNXyO5agnVeUJeA6Jjx+oxq9KJH14jJ+Z8M3hMW+6wr6M3f"
                                  }];
         
 
-//        configModel.projectName = [configDic objectForKey:@"projectName"];
-//        configModel.logStoreName = [configDic objectForKey:@"logStoreName"];
-//        configModel.sts_ak = [configDic objectForKey:@"sts_ak"];
-//        configModel.sts_sk = [configDic objectForKey:@"sts_sk"];
-//        configModel.sts_token = [configDic objectForKey:@"sts_token"];
+
         [BBLogAgent startWithAppKey:@"test" reportPolicy:ReportPolicyBatch serverURL:@""];
-        
+        InstallUncaughtExceptionHandler();
     });
     
     return YES;

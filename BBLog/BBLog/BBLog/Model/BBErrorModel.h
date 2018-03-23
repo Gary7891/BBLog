@@ -41,6 +41,11 @@
  */
 @property NSString     *version;
 
+/**
+ 用户token或者ID
+ */
+@property NSString                 *userToken;
+
 
 - (NSDictionary*)toDictionary;
 
