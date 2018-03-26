@@ -11,13 +11,18 @@
 
 typedef enum {
     /**
+     * 发送策略，无，即不发送
+     */
+    ReportPolicyTypeNone  =  0,
+    /**
      *  实时发送
      */
-    ReportPolicyRealTime,
+    ReportPolicyRealTime = 1,
     /**
      *  下次启动发送
      */
-    ReportPolicyBatch,
+    ReportPolicyBatch  =  2,
+    
 } ReportPolicyType;
 
 @interface BBLogAgent : NSObject

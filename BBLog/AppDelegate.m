@@ -34,23 +34,24 @@
     [self.window makeKeyAndVisible];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [BBLogAgent ConfigWith:@{@"x-version":@"1.0",
-                                 @"Authorization":@"1234567890",
-                                 @"x-platform"    : @"iOS",
-                                 @"x-client"      : @"store",
-                                 @"x-equCode"     : @"dsdsdsdsdsddsdsdsd",
-                                 @"endPoint"      : @"cn-shanghai.log.aliyuncs.com",
-                                 @"projectName"   : @"tticar",
-                                 @"logStoreName"  : @"store-test",
-                                 @"sts_ak"        : @"STS.L1mLqrwSfaTuL9MQrDHnxCmay",
-                                 @"sts_sk"        : @"8VkVdkYMQkdzzomX8niR6pVrWf2kZZP72e4aCNVJjZGR",
-                                 @"sts_token"     : @"CAISgQJ1q6Ft5B2yfSjIrfLYB8vGmoxH1paeTh/8tXIRROFUrKjKmzz2IH1NdHBuBO4bvvswnWtU6PkelqVoRoReREvCKM1565kPUf4Lh0eF6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmsP3gnpPGskOB0AOilr5OnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwr1fwdp2qZ44HCXAAKv0vZb/Cq+9l+MQl9Yac6BqRNqvTmkvx0oOvXmpQSMZmR4wPDOhqAAYzjUnSjvUqsQWciY1zQtehY6+X8PtVmjs51e8s81Ulh3JzEGu8U7kCSWAdUXTAufW5k3K38ERyKp3xd6HBqjq6rHyxV4sKiVeddVpMbMglYcEbBJuchTrR2gDv6MPNXyO5agnVeUJeA6Jjx+oxq9KJH14jJ+Z8M3hMW+6wr6M3f"
-                                 }];
+//        [BBLogAgent ConfigWith:@{@"x-version":@"1.0",
+//                                 @"Authorization":@"1234567890",
+//                                 @"x-platform"    : @"iOS",
+//                                 @"x-client"      : @"store",
+//                                 @"x-equCode"     : @"dsdsdsdsdsddsdsdsd",
+//                                 @"endPoint"      : @"cn-shanghai.log.aliyuncs.com",
+//                                 @"projectName"   : @"tticar",
+//                                 @"logStoreName"  : @"store-test",
+//                                 @"sts_ak"        : @"STS.L1mLqrwSfaTuL9MQrDHnxCmay",
+//                                 @"sts_sk"        : @"8VkVdkYMQkdzzomX8niR6pVrWf2kZZP72e4aCNVJjZGR",
+//                                 @"sts_token"     : @"CAISgQJ1q6Ft5B2yfSjIrfLYB8vGmoxH1paeTh/8tXIRROFUrKjKmzz2IH1NdHBuBO4bvvswnWtU6PkelqVoRoReREvCKM1565kPUf4Lh0eF6aKP9rUhpMCPOwr6UmzWvqL7Z+H+U6muGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wMDL1VJH7aCwBLH9BLPABvhdYHPH/KT5aXPwXtn3DbATgD2GM+qxsmsP3gnpPGskOB0AOilr5OnemrfMj4NfsLFYxkTtK40NZxcqf8yyNK43BIjvwr1fwdp2qZ44HCXAAKv0vZb/Cq+9l+MQl9Yac6BqRNqvTmkvx0oOvXmpQSMZmR4wPDOhqAAYzjUnSjvUqsQWciY1zQtehY6+X8PtVmjs51e8s81Ulh3JzEGu8U7kCSWAdUXTAufW5k3K38ERyKp3xd6HBqjq6rHyxV4sKiVeddVpMbMglYcEbBJuchTrR2gDv6MPNXyO5agnVeUJeA6Jjx+oxq9KJH14jJ+Z8M3hMW+6wr6M3f"
+//                                 }];
         
 
 
-        [BBLogAgent startWithAppKey:@"test" reportPolicy:ReportPolicyBatch serverURL:@""];
-        InstallUncaughtExceptionHandler();
+//        [BBLogAgent startWithAppKey:@"test" reportPolicy:ReportPolicyBatch serverURL:@""];
+//        InstallUncaughtExceptionHandler();
+//        [BBLogAgent setDefaultHandler];
     });
     
     return YES;

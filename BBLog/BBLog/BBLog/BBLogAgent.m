@@ -329,7 +329,7 @@ void UncaughtExceptionHandler(NSException * exception)
     {
         [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(commitUsingTime:) withObject:pageName];
     }
-    else
+    else if([BBLogAgent sharedLogAgent].reportPolicy == ReportPolicyBatch)
     {
         [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(saveActivityUsingTime:) withObject:pageName];
     }
@@ -855,7 +855,7 @@ void UncaughtExceptionHandler(NSException * exception)
             debug_NSLog(@"archive client data because of BATCH mode");
         }
     }
-    else
+    else if(self.reportPolicy == ReportPolicyRealTime)
     {
 
         [self processClientData:clientModel];
@@ -893,7 +893,7 @@ void UncaughtExceptionHandler(NSException * exception)
             [realm addObject:eventModel];
         }];
     }
-    else
+    else if(self.reportPolicy == ReportPolicyRealTime)
     {
         [self processEvent:eventModel];
     }
@@ -915,7 +915,7 @@ void UncaughtExceptionHandler(NSException * exception)
             debug_NSLog(@"Archived tag count = %lu",(unsigned long)[mTagArray count]);
         }
     }
-    else
+    else if(self.reportPolicy == ReportPolicyRealTime)
     {
         [self processTag:tag];
     }
@@ -1277,6 +1277,8 @@ void InstallUncaughtExceptionHandler()
     signal(SIGPIPE, MySignalHandler);  
     
 }
+
+
 
 
 
