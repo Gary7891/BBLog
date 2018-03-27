@@ -283,13 +283,13 @@ void UncaughtExceptionHandler(NSException * exception)
                 debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
             }
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
                 
-                RLMRealm *realm = [RLMRealm defaultRealm];
-                [realm transactionWithBlock:^{
-                    [realm addObject: activityModel];
-                }];
-            });
+            RLMRealm *realm = [RLMRealm defaultRealm];
+            [realm transactionWithBlock:^{
+                [realm addObject: activityModel];
+            }];
+            
         }
     }
 }
