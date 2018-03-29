@@ -612,9 +612,15 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)bindUserIdentifier:(NSString *)userToken
 {
-    
+    if (!userToken) {
+        userToken = @"";
+    }
     BBClientModel *clientModel = [[BBLogAgent sharedLogAgent] getCurrentClentModel];
-    clientModel.userId = userToken;
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    [realm transactionWithBlock:^{
+        clientModel.userId = userToken;
+    }];
+    
     [BBLogAgent sharedLogAgent].configModel.token = userToken;
     
 }
