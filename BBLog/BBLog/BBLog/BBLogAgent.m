@@ -257,7 +257,7 @@ void UncaughtExceptionHandler(NSException * exception)
 
     NSDictionary *params = @{
                              @"pageName"     :   [pageName copy] ,
-                             @"relatedData"  :   data
+                             @"relatedData"  :   data?:@""
                              };
     [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(recordStartTimeWithParams:) withObject:params];
 
