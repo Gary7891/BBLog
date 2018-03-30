@@ -84,9 +84,9 @@ NSString * applicationDocumentsDirectory()
 
 @property (nonatomic ,strong) NSDate                       *sessionStopDate;
 
-@property (nonatomic, strong) NSString                     *relatedData;
+@property (nonatomic, copy) NSString                     *relatedData;
 
-@property (nonatomic, strong) NSString                     *currentPageId;
+@property (nonatomic, copy) NSString                     *currentPageId;
 
 @property (nonatomic, strong)BBConfigModel                 *configModel;
 
@@ -250,32 +250,46 @@ void UncaughtExceptionHandler(NSException * exception)
 
 +(void)startTracPage:(NSString*)pageName
 {
-    [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(recordStartTime:) withObject:pageName];
+    [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(recordStartTime:) withObject:[pageName copy]];
 }
 
 + (void)startTracPage:(NSString *)pageName relatedData:(NSString *)data {
-    
+
+    NSDictionary *params = @{
+                             @"pageName"     :   [pageName copy] ,
+                             @"relatedData"  :   data
+                             };
+    [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(recordStartTimeWithParams:) withObject:params];
+
 }
 
-- (void)recordStartTime:(NSString*) pageName relatedData:(NSString*)data {
+- (void)recordStartTimeWithParams:(NSDictionary*)params {
     @autoreleasepool {
+        NSString *pageName = [params objectForKey:@"pageName"];
+        NSString *data = [params objectForKey:@"relatedData"];
         self.pageName = [[NSString alloc] initWithString:pageName];
         self.relatedData = data?:@"";
         NSDate *pageStartDate = [[NSDate date] copy];
         RLMResults<BBActivityModel*> *activityResult = [BBActivityModel objectsWhere:@"ID = %@",self.currentPageId];
         BBActivityModel *activityModel = nil;
         if (activityResult.count && activityResult.firstObject) {
-            activityModel = activityResult.firstObject;
-            RLMRealm *realm = [RLMRealm defaultRealm];
-            [realm transactionWithBlock:^{
-                activityModel.relatedData = self.relatedData;
-            }];
-        }else {
+            if ([activityResult.firstObject isKindOfClass:[BBActivityModel class]] && !activityResult.firstObject.relatedData) {
+                activityModel = activityResult.firstObject;
+                RLMRealm *realm = [RLMRealm defaultRealm];
+                [realm transactionWithBlock:^{
+                    activityModel.relatedData = self.relatedData;
+                }];
+            }
+            
+        }
+        
+        if (!activityModel) {
             activityModel = [[BBActivityModel alloc] init];
+            self.currentPageId = activityModel.ID;
             activityModel.sessionId = self.sessionId;
-            activityModel.relatedData = self.relatedData;
+            activityModel.relatedData = data;
             activityModel.startMils = [pageStartDate timeIntervalSince1970];
-            activityModel.activityName = self.pageName;
+            activityModel.activityName = pageName;
             activityModel.version = [self getVersion];
             activityModel.userToken = self.configModel.token;
             if(activityModel)
@@ -301,6 +315,7 @@ void UncaughtExceptionHandler(NSException * exception)
         self.relatedData = @"";
         NSDate *pageStartDate = [[NSDate date] copy];
         BBActivityModel *activityModel = [[BBActivityModel alloc] init];
+        self.currentPageId = activityModel.ID;
         activityModel.sessionId = self.sessionId;
         activityModel.relatedData = self.relatedData;
         activityModel.startMils = [pageStartDate timeIntervalSince1970];
@@ -312,14 +327,14 @@ void UncaughtExceptionHandler(NSException * exception)
             debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
             
             RLMRealm *realm = [RLMRealm defaultRealm];
             [realm transactionWithBlock:^{
                 [realm addObject: activityModel];
             }];
-        });
-        self.currentPageId = activityModel.ID;
+        
+        
     }
 }
 
@@ -327,11 +342,11 @@ void UncaughtExceptionHandler(NSException * exception)
 {
     if([BBLogAgent sharedLogAgent].reportPolicy == ReportPolicyRealTime)
     {
-        [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(commitUsingTime:) withObject:pageName];
+        [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(commitUsingTime:) withObject:[pageName copy]];
     }
     else if([BBLogAgent sharedLogAgent].reportPolicy == ReportPolicyBatch)
     {
-        [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(saveActivityUsingTime:) withObject:pageName];
+        [[BBLogAgent sharedLogAgent] performSelectorInBackground:@selector(saveActivityUsingTime:) withObject:[pageName copy]];
     }
     
 }
@@ -484,12 +499,22 @@ void UncaughtExceptionHandler(NSException * exception)
 {
     @autoreleasepool
     {
-        RLMResults<BBActivityModel*> *activityResult = [BBActivityModel objectsWhere:@"ID = %@",self.currentPageId];
-        if (!activityResult.count) {
-            return;
+        BBActivityModel *activityModel = nil;
+        if (self.currentPageId.length) {
+            RLMResults<BBActivityModel*> *activityResult = [BBActivityModel objectsWhere:@"ID = %@",[self.currentPageId copy]];
+            if (activityResult.count) {
+                activityModel = activityResult.firstObject;
+            }
         }
-        BBActivityModel *activityModel = activityResult.firstObject;
         if (!activityModel) {
+            RLMResults<BBActivityModel*> *activityResult = [[BBActivityModel objectsWhere:@"activityName = %@ and sessionId = %@",currentPageName,[self.sessionId copy]] sortedResultsUsingKeyPath:@"startMils" ascending:NO];
+            if (activityResult.count) {
+                NSLog(@"排序得来");
+                activityModel = activityResult.firstObject;
+            }
+            
+        }
+        if (!activityModel || activityModel.endMils > 0) {
             return;
         }
         NSDate *pageStartDate = [NSDate dateWithTimeIntervalSince1970:activityModel.startMils];
@@ -1119,7 +1144,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 +(NSString *)getDeviceId
 {
-    BBClientModel *model = [[BBClientModel allObjects] sortedResultsUsingKeyPath:@"time" ascending:NO].firstObject;
+    BBConfigModel *model = [BBLogAgent sharedLogAgent].configModel;
     if (model.deviceId) {
         return model.deviceId;
     }else {
