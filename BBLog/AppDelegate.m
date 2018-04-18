@@ -35,10 +35,12 @@
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
 //        [BBLogAgent ConfigWith:@{@"x-version":@"1.0",
-//                                 @"Authorization":@"1234567890",
+//                                 @"accountId":@"1234567890",
 //                                 @"x-platform"    : @"iOS",
 //                                 @"x-client"      : @"store",
 //                                 @"x-equCode"     : @"dsdsdsdsdsddsdsdsd",
+//                                 @"subAccountId"  : @"",
+//                                 @"accountName"   : @"",
 //                                 @"endPoint"      : @"cn-shanghai.log.aliyuncs.com",
 //                                 @"projectName"   : @"tticar",
 //                                 @"logStoreName"  : @"store-test",

@@ -14,7 +14,9 @@
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
     [dic setObject:self.version?:@"" forKey:@"x-version"];
-    [dic setObject:self.token?:@"" forKey:@"Authorization"];
+    [dic setObject:self.accountId?:@"" forKey:@"accountId"];
+    [dic setObject:self.subAccountId?:@"" forKey:@"subAccountId"];
+    [dic setObject:self.accountName?:@"" forKey:@"accountName"];
     [dic setObject:self.clientName?:@"" forKey:@"x-client"];
     [dic setObject:self.deviceId?:@"" forKey:@"x-equCode"];
     [dic setObject:self.platform?:@"" forKey:@"x-platform"];

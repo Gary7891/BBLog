@@ -13,7 +13,11 @@
 
 @property (nonatomic, copy) NSString               *version;
 
-@property (nonatomic, copy) NSString               *token;
+@property (nonatomic, copy) NSString               *accountId;
+
+@property (nonatomic, copy) NSString               *accountName;
+
+@property (nonatomic, copy) NSString               *subAccountId;
 
 @property (nonatomic, copy) NSString               *clientName;
 

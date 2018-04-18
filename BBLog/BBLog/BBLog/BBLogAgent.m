@@ -155,10 +155,12 @@ void UncaughtExceptionHandler(NSException * exception)
     
     
     configModel.version = [configDic objectForKey:@"x-version"]?:@"";
-    configModel.token = [configDic objectForKey:@"Authorization"]?:@"";
+    configModel.accountId = [configDic objectForKey:@"accountId"]?:@"";
     configModel.clientName = [configDic objectForKey:@"x-client"]?:@"";
     configModel.deviceId = [configDic objectForKey:@"x-equCode"]?:@"";
     configModel.platform = [configDic objectForKey:@"x-platform"]?:@"";
+    configModel.subAccountId = [configDic objectForKey:@"subAccountId"]?:@"";
+    configModel.accountName = [configDic objectForKey:@"accountName"]?:@"";
     configModel.endPoint = [configDic objectForKey:@"endPoint"]?:@"";
     configModel.projectName = [configDic objectForKey:@"projectName"]?:@"";
     configModel.logStoreName = [configDic objectForKey:@"logStoreName"]?:@"";
@@ -291,7 +293,7 @@ void UncaughtExceptionHandler(NSException * exception)
             activityModel.startMils = [pageStartDate timeIntervalSince1970];
             activityModel.activityName = pageName;
             activityModel.version = [self getVersion];
-            activityModel.userToken = self.configModel.token;
+            activityModel.userToken = self.configModel.accountId;
             if(activityModel)
             {
                 debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
@@ -321,7 +323,7 @@ void UncaughtExceptionHandler(NSException * exception)
         activityModel.startMils = [pageStartDate timeIntervalSince1970];
         activityModel.activityName = self.pageName;
         activityModel.version = [self getVersion];
-        activityModel.userToken = self.configModel.token;
+        activityModel.userToken = self.configModel.accountId;
         if(activityModel)
         {
             debug_NSLog(@"acLog sessionId = %@",activityModel.sessionId);
@@ -563,7 +565,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
     eventModel.version = [[BBLogAgent sharedLogAgent] getVersion];
     eventModel.acc = 1;
-    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -577,7 +579,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
     eventModel.descriptionString = @"";
     eventModel.relatedData = label;
-    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
     
 }
@@ -592,7 +594,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.activityName =[[NSBundle mainBundle] bundleIdentifier];
     eventModel.descriptionString = @"";
     eventModel.relatedData = @"";
-    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
     
 }
@@ -607,7 +609,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.version = [[BBLogAgent sharedLogAgent] getVersion];
     eventModel.descriptionString = @"";
     eventModel.relatedData = label;
-    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -621,7 +623,7 @@ void UncaughtExceptionHandler(NSException * exception)
     eventModel.descriptionString = @"";
     eventModel.relatedData = data;
     eventModel.index = index;
-    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.token;
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
@@ -646,7 +648,7 @@ void UncaughtExceptionHandler(NSException * exception)
         clientModel.userId = userToken;
     }];
     
-    [BBLogAgent sharedLogAgent].configModel.token = userToken;
+    [BBLogAgent sharedLogAgent].configModel.accountId = userToken;
     
 }
 
@@ -867,7 +869,7 @@ void UncaughtExceptionHandler(NSException * exception)
     BBClientModel *clientModel = [[BBLogAgent sharedLogAgent] getDeviceInfo];
     clientModel.time = [[NSDate date] timeIntervalSince1970];
     clientModel.version = self.configModel.version;
-    clientModel.userId = self.configModel.token;
+    clientModel.userId = self.configModel.accountId;
     clientModel.clientName = self.configModel.clientName;
     clientModel.deviceId = self.configModel.deviceId;
     clientModel.platform = self.configModel.platform;
@@ -1080,7 +1082,7 @@ void uncaughtExceptionHandler(NSException *exception) {
         errorModel.activity = [[NSBundle mainBundle] bundleIdentifier];
         errorModel.osVersion = [[UIDevice currentDevice] systemVersion];
         errorModel.deviceID = [BBLogAgent getDeviceId];
-        errorModel.userToken = self.configModel.token;
+        errorModel.userToken = self.configModel.accountId;
         BBReturnModel *ret = [[NetWorkTools sharedNetWork] postErrorLog:_appKey errorLog:errorModel];
         if(ret.status<0)
         {

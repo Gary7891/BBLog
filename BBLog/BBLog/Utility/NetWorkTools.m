@@ -316,7 +316,7 @@
                                                         error:&error];
     
     NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return [self sendDataToAliyun:dataString topic:@"BrowsingPath" semaphore:semaphore];
+    return [self sendDataToAliyun:dataString topic:@"content" semaphore:semaphore];
     
 }
 
@@ -327,7 +327,7 @@
                                                          error:&error];
     
     NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return  [self sendDataToAliyun:dataString topic:@"Clicks" semaphore:semaphore];
+    return  [self sendDataToAliyun:dataString topic:@"content" semaphore:semaphore];
 }
 
 - (BOOL)sendDataToAliyun:(NSString*)data topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{
