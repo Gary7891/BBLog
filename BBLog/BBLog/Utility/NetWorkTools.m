@@ -282,7 +282,8 @@
         [activtyLogDic setObject:[self.configModel headerDictionary] forKey:@"header"];
         [activtyLogDic setObject:@"BrowsingPath" forKey:@"mdtype"];
         [activtyLogDic setObject:activityArray forKey:@"entity"];
-        activitySuccess = [self postActivityLogs:activtyLogDic semaphore:semaphore];
+        NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:activtyLogDic,@"content", nil];
+        activitySuccess = [self postActivityLogs:dic semaphore:semaphore];
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     });
     
@@ -292,7 +293,8 @@
         [eventDic setObject:@"Clicks" forKey:@"mdtype"];
         NSArray *eventArray = [allLogs objectForKey:@"eventArray"];
         [eventDic setObject:eventArray forKey:@"entity"];
-        eventSuccess = [self postEventLogs:eventDic semaphore:semaphore];
+        NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:eventDic,@"content", nil];
+        eventSuccess = [self postEventLogs:dic semaphore:semaphore];
         
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     });
@@ -316,7 +318,7 @@
                                                         error:&error];
     
     NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return [self sendDataToAliyun:dataString topic:@"content" semaphore:semaphore];
+    return [self sendDataToAliyun:dataString topic:@"BrowsingPath" semaphore:semaphore];
     
 }
 
@@ -327,7 +329,7 @@
                                                          error:&error];
     
     NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return  [self sendDataToAliyun:dataString topic:@"content" semaphore:semaphore];
+    return  [self sendDataToAliyun:dataString topic:@"Clicks" semaphore:semaphore];
 }
 
 - (BOOL)sendDataToAliyun:(NSString*)data topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{
