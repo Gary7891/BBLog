@@ -30,7 +30,7 @@
 
 - (NSDictionary*)toDictionary {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
-    [dic setObject:[NSString stringWithFormat:@"%@",@(self.index)] forKey:@"index"];
+    [dic setObject:self.index?:@"" forKey:@"index"];
     [dic setObject:self.eventId?:@"" forKey:@"adtype"];
     [dic setObject:self.relatedData?:@"" forKey:@"adid"];
     [dic setObject:[NSString stringWithFormat:@"%f",self.time] forKey:@"ctime"];

@@ -42,7 +42,7 @@
 /**
  事件索引
  */
-@property NSInteger index;
+@property NSString *index;
 /**
  *  事件计数
  */

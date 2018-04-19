@@ -48,7 +48,7 @@ typedef enum {
  @param data 相关的数据，比如广告ID
  @param index 事件索引
  */
-+(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSInteger)index;
++(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSString*)index;
 
 +(void)postTag:(NSString *)tag;
 

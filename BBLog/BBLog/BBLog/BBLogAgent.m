@@ -613,7 +613,7 @@ void UncaughtExceptionHandler(NSException * exception)
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
-+(void)postEvent:(NSString *)eventId relatedData:(NSString *)data index:(NSInteger)index {
++(void)postEvent:(NSString *)eventId relatedData:(NSString *)data index:(NSString*)index {
     BBEventModel *eventModel = [[BBEventModel alloc] init];
     eventModel.eventId = eventId;
     eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
