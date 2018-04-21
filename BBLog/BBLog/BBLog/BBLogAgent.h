@@ -74,5 +74,7 @@ typedef enum {
 + (NSUncaughtExceptionHandler *)getHandler;
 + (void)TakeException:(NSException *) exception;
 
++(NSDictionary*)configDictionary;
+
 @end
 void InstallUncaughtExceptionHandler();

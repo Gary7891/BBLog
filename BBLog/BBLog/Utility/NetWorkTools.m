@@ -280,21 +280,14 @@
         NSArray *activityArray = [allLogs objectForKey:@"activityLog"];
         NSMutableDictionary *activtyLogDic = [[NSMutableDictionary alloc]init];
         [activtyLogDic setObject:[self.configModel headerDictionary] forKey:@"header"];
-        [activtyLogDic setObject:@"BrowsingPath" forKey:@"mdtype"];
         [activtyLogDic setObject:activityArray forKey:@"entity"];
-        NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:activtyLogDic,@"content", nil];
-        activitySuccess = [self postActivityLogs:dic semaphore:semaphore];
+        activitySuccess = [self postActivityLogs:activtyLogDic semaphore:semaphore];
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     });
     
     dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
-        NSMutableDictionary *eventDic = [[NSMutableDictionary alloc]init];
-        [eventDic setObject:[self.configModel headerDictionary] forKey:@"header"];
-        [eventDic setObject:@"Clicks" forKey:@"mdtype"];
         NSArray *eventArray = [allLogs objectForKey:@"eventArray"];
-        [eventDic setObject:eventArray forKey:@"entity"];
-        NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:eventDic,@"content", nil];
-        eventSuccess = [self postEventLogs:dic semaphore:semaphore];
+        eventSuccess = [self postEventLogs:eventArray semaphore:semaphore];
         
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     });
@@ -312,27 +305,37 @@
 }
 
 - (BOOL)postActivityLogs:(NSDictionary*)dictionary semaphore:(dispatch_semaphore_t)semaphore{
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
-                                                       options:NSJSONWritingPrettyPrinted
-                                                        error:&error];
+//    NSError *error = nil;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+//                                                       options:NSJSONWritingPrettyPrinted
+//                                                         error:&error];
+//
+//    NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
     
-    NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return [self sendDataToAliyun:dataString topic:@"BrowsingPath" semaphore:semaphore];
+    
+    return [self sendDataToAliyun:@[dictionary] topic:@"BrowsingPath" semaphore:semaphore];
     
 }
 
-- (BOOL)postEventLogs:(NSDictionary*)dictionary semaphore:(dispatch_semaphore_t)semaphore{
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
-                                                       options:NSJSONWritingPrettyPrinted
-                                                         error:&error];
+- (BOOL)postEventLogs:(NSArray*)array semaphore:(dispatch_semaphore_t)semaphore{
     
-    NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return  [self sendDataToAliyun:dataString topic:@"Clicks" semaphore:semaphore];
+//    NSError *error = nil;
+//    NSMutableArray *stringArray = [[NSMutableArray alloc]init];
+//    for (NSDictionary *dictionary in array) {
+//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+//                                                           options:NSJSONWritingPrettyPrinted
+//                                                             error:&error];
+//        if (!error) {
+//            NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//            [stringArray addObject:dataString];
+//        }
+//    }
+    
+    return  [self sendDataToAliyun:array topic:@"Clicks" semaphore:semaphore];
 }
 
-- (BOOL)sendDataToAliyun:(NSString*)data topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{
+- (BOOL)sendDataToAliyun:(NSArray*)dataArray topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{
     
     dispatch_semaphore_t semaphoreSend = dispatch_semaphore_create(0);
     __block BOOL success = YES;
@@ -342,11 +345,27 @@
                                       accessKeySecret:self.configModel.sts_sk
                                           projectName:self.configModel.projectName];
     [client SetToken:self.configModel.sts_token];
-    
-    Log *logInfo = [[Log alloc]init];
-    [logInfo PutContent:data withKey:topic];
     LogGroup *group = [[LogGroup alloc]initWithTopic:topic andSource:@"iOS"];
-    [group PutLog:logInfo];
+    for (NSDictionary* dictionary in dataArray) {
+        Log *logInfo = [[Log alloc]init];
+        for (NSString *key in [dictionary allKeys]) {
+            NSString *value = [dictionary objectForKey:key];
+            if (![value isKindOfClass:[NSString class]]) {
+                NSError *error = nil;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                                   options:NSJSONWritingPrettyPrinted
+                                                                     error:&error];
+                if (!error) {
+                    NSString *dataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    [logInfo PutContent:dataString?:@"" withKey:key];
+                }
+            }else {
+                [logInfo PutContent:value?:@"" withKey:key];
+            }
+            
+        }
+        [group PutLog:logInfo];
+    }
     [client PostLog:group logStoreName:self.configModel.logStoreName call:^(NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSLog(@"response %@", [response debugDescription]);
         NSLog(@"error %@",[error debugDescription]);

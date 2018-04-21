@@ -7,6 +7,8 @@
 //
 
 #import "BBEventModel.h"
+#import "BBConfigModel.h"
+#import "BBLogAgent.h"
 //#import <objc/runtime.h>
 //#import <objc/message.h>
 
@@ -34,6 +36,10 @@
     [dic setObject:self.eventId?:@"" forKey:@"adtype"];
     [dic setObject:self.relatedData?:@"" forKey:@"adid"];
     [dic setObject:[NSString stringWithFormat:@"%f",self.time] forKey:@"ctime"];
+    NSDictionary *configDic = [BBLogAgent configDictionary];
+    NSString *storeId = [configDic objectForKey:@"storeId"]?:@"";
+    [dic setObject:storeId forKey:@"storeId"];
+    [dic setObject:[configDic objectForKey:@"storeName"]?:@"" forKey:@"storeName"];
 
     return dic;
     

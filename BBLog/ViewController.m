@@ -55,7 +55,7 @@
 
 
 - (void)buttonAction:(id)sender {
-    [BBLogAgent postEvent:@"Test" relatedData:@"00000001" acc:1];
+    [BBLogAgent postEvent:@"Test" relatedData:@"00000001" index:@"dd_dsd"];
     SecondViewController *secondViewController = [[SecondViewController alloc]init];
     [self.navigationController pushViewController:secondViewController animated:YES];
 }

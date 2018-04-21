@@ -7,6 +7,7 @@
 //
 
 #import "BBActivityModel.h"
+#import "BBLogAgent.h"
 
 @implementation BBActivityModel
 
@@ -31,6 +32,10 @@
     [dic setObject:self.activityName?:@"" forKey:@"type"];
     [dic setObject:self.relatedData?:@"" forKey:@"refid"];
     [dic setObject:[NSString stringWithFormat:@"%f",self.startMils] forKey:@"ctime"];
+    NSDictionary *configDic = [BBLogAgent configDictionary];
+    NSString *storeId = [configDic objectForKey:@"storeId"]?:@"";
+    [dic setObject:storeId forKey:@"storeId"];
+    [dic setObject:[configDic objectForKey:@"storeName"]?:@"" forKey:@"storeName"];
     
     return dic;
     

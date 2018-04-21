@@ -1144,6 +1144,13 @@ void uncaughtExceptionHandler(NSException *exception) {
                                encoding:NSUTF8StringEncoding];
 }
 
++(NSDictionary*)configDictionary {
+    if ([BBLogAgent sharedLogAgent].configModel) {
+        return [[BBLogAgent sharedLogAgent].configModel headerDictionary];
+    }
+    return @{};
+}
+
 +(NSString *)getDeviceId
 {
     BBConfigModel *model = [BBLogAgent sharedLogAgent].configModel;
