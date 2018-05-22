@@ -31,7 +31,8 @@
     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
     [dic setObject:self.activityName?:@"" forKey:@"type"];
     [dic setObject:self.relatedData?:@"" forKey:@"refid"];
-    [dic setObject:[NSString stringWithFormat:@"%f",self.startMils] forKey:@"ctime"];
+    long timemmils = self.startMils * 1000;
+    [dic setObject:[NSString stringWithFormat:@"%@",@(timemmils)] forKey:@"ctime"];
     NSDictionary *configDic = [BBLogAgent configDictionary];
     NSString *storeId = [configDic objectForKey:@"storeId"]?:@"";
     [dic setObject:storeId forKey:@"storeId"];

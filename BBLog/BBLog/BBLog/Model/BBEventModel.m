@@ -35,7 +35,8 @@
     [dic setObject:self.index?:@"" forKey:@"index"];
     [dic setObject:self.eventId?:@"" forKey:@"adtype"];
     [dic setObject:self.relatedData?:@"" forKey:@"adid"];
-    [dic setObject:[NSString stringWithFormat:@"%f",self.time] forKey:@"ctime"];
+    long timemills = self.time * 1000;
+    [dic setObject:[NSString stringWithFormat:@"%@",@(timemills)] forKey:@"ctime"];
     NSDictionary *configDic = [BBLogAgent configDictionary];
     NSString *storeId = [configDic objectForKey:@"storeId"]?:@"";
     [dic setObject:storeId forKey:@"storeId"];
