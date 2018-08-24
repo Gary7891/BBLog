@@ -167,6 +167,9 @@ void UncaughtExceptionHandler(NSException * exception)
     configModel.sts_ak = [configDic objectForKey:@"sts_ak"]?:@"";
     configModel.sts_sk = [configDic objectForKey:@"sts_sk"]?:@"";
     configModel.sts_token = [configDic objectForKey:@"sts_token"]?:@"";
+    configModel.province = [configDic objectForKey:@"x-province"];
+    configModel.city = [configDic objectForKey:@"x-city"];
+    configModel.area = [configDic objectForKey:@"x-area"];
     
     [BBLogAgent sharedLogAgent].configModel = configModel;
   

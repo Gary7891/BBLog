@@ -26,6 +26,9 @@
     [dic setObject:self.clientName?:@"" forKey:@"x-client"];
     [dic setObject:self.deviceId?:@"" forKey:@"x-equCode"];
     [dic setObject:self.platform?:@"" forKey:@"x-platform"];
+    [dic setObject:self.province forKey:@"x-province"];
+    [dic setObject:self.city forKey:@"x-city"];
+    [dic setObject:self.area forKey:@"x-area"];
     
     return dic;
 }

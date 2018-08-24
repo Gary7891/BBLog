@@ -25,6 +25,12 @@
 
 @property (nonatomic, copy) NSString               *deviceId;
 
+@property (nonatomic, copy) NSString               *province;
+
+@property (nonatomic, copy) NSString               *city;
+
+@property (nonatomic, copy) NSString               *area;
+
 ////////////////////////////阿里云日志服务的一些参数////////////////////////////////////
 
 
