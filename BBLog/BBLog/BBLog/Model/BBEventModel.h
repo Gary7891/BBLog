@@ -57,6 +57,8 @@
  */
 @property NSString                 *userToken;
 
+@property NSString                 *topic;
+
 
 
 - (NSDictionary*)toDictionary;

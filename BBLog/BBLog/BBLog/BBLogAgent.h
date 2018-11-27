@@ -50,6 +50,16 @@ typedef enum {
  */
 +(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSString*)index;
 
+/**
+ 点击事件记录
+
+ @param eventId 事件类型（ID）
+ @param data 相关数据，比如广告ID
+ @param index 事件索引
+ @param topic 事件主题
+ */
++(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSString*)index topic:(NSString*)topic;
+
 +(void)postTag:(NSString *)tag;
 
 +(void)bindUserIdentifier:(NSString *)userid;

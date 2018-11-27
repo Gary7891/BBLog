@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/BBLog/BBLogAgent.m"
-            timestampString = "545902700.337919"
+            timestampString = "564998014.945637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "222"
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/BBLog/BBLogAgent.m"
-            timestampString = "545902700.337993"
+            timestampString = "564998014.945712"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "244"
             endingLineNumber = "244"
-            landmarkName = "-getCurrentClentModel"
+            landmarkName = "-initWithAppKey:reportPolicy:serverURL:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/BBLog/BBLogAgent.m"
-            timestampString = "545902700.3380491"
+            timestampString = "564998014.945771"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "702"
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/BBLog/BBLogAgent.m"
-            timestampString = "545902700.338098"
+            timestampString = "564998014.9458261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "650"
             endingLineNumber = "650"
-            landmarkName = "+bindUserIdentifier:"
+            landmarkName = "+postEvent:relatedData:index:topic:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -100,12 +100,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/Utility/NetWorkTools.m"
-            timestampString = "545911556.107995"
+            timestampString = "564998014.945923"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
-            landmarkName = "-postEventLogs:semaphore:"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
+            landmarkName = "-postEventLogs:topic:semaphore:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -116,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/Utility/NetWorkTools.m"
-            timestampString = "545911556.108364"
+            timestampString = "564998014.946318"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "-sendDataToAliyun:topic:semaphore:"
             landmarkType = "7">
          </BreakpointContent>
@@ -132,12 +132,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/BBLog/BBLogAgent.m"
-            timestampString = "545902700.338971"
+            timestampString = "564998014.946583"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "674"
             endingLineNumber = "674"
-            landmarkName = "-processArchivedLogs"
+            landmarkName = "+bindUserIdentifier:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -148,27 +148,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BBLog/BBLog/Utility/NetWorkTools.m"
-            timestampString = "545911556.108639"
+            timestampString = "564998014.946637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
-            landmarkName = "-postAllLogs:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BBLog/BBLog/Utility/NetWorkTools.m"
-            timestampString = "545911556.108881"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "364"
-            endingLineNumber = "364"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
             landmarkName = "-sendDataToAliyun:topic:semaphore:"
             landmarkType = "7">
             <Locations>

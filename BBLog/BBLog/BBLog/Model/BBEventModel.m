@@ -21,7 +21,8 @@
 
 +(NSDictionary*)defaultPropertyValues {
     NSDictionary *defaultValuesDic = @{
-                                       @"ID" :  [[NSUUID UUID] UUIDString]
+                                       @"ID" :  [[NSUUID UUID] UUIDString],
+                                       @"topic" : @"Clicks"
                                        };
     return defaultValuesDic;
 }

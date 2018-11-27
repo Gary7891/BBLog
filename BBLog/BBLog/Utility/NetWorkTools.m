@@ -271,7 +271,6 @@
 
 - (BBReturnModel*)postAllLogs:(NSMutableDictionary*)allLogs {
     
-    __block BOOL eventSuccess = YES;
     __block BOOL activitySuccess = YES;
     dispatch_semaphore_t semaphore_top = dispatch_semaphore_create(0);
     dispatch_group_t group = dispatch_group_create();
@@ -284,13 +283,17 @@
         activitySuccess = [self postActivityLogs:activtyLogDic semaphore:semaphore];
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     });
+    NSDictionary *eventDic = [allLogs objectForKey:@"eventArray"];
+    NSMutableArray *statusArray = [[NSMutableArray alloc] init];
+    for (NSString *keyStr in eventDic) {
+        dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
+            NSArray *eventArray = [eventDic objectForKey:keyStr];
+            __block BOOL eSuccess = [self postEventLogs:eventArray topic:keyStr semaphore:semaphore];
+            [statusArray addObject:[NSNumber numberWithBool:eSuccess]];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        });
+    }
     
-    dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
-        NSArray *eventArray = [allLogs objectForKey:@"eventArray"];
-        eventSuccess = [self postEventLogs:eventArray semaphore:semaphore];
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    });
     
     dispatch_group_notify(group, dispatch_get_global_queue(0, 0), ^{
         NSLog(@"任务完成");
@@ -298,7 +301,11 @@
     });
     dispatch_semaphore_wait(semaphore_top, DISPATCH_TIME_FOREVER);
     BBReturnModel *model = [[BBReturnModel alloc]init];
-    model.evnetSuccess = eventSuccess;
+    BOOL eventStatus = YES;
+    for (NSNumber *status in statusArray) {
+        eventStatus = eventStatus & status.boolValue;
+    }
+    model.evnetSuccess = eventStatus;
     model.activitySuccess = activitySuccess;
     return model;
  
@@ -318,7 +325,7 @@
     
 }
 
-- (BOOL)postEventLogs:(NSArray*)array semaphore:(dispatch_semaphore_t)semaphore{
+- (BOOL)postEventLogs:(NSArray*)array topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{
     
 //    NSError *error = nil;
 //    NSMutableArray *stringArray = [[NSMutableArray alloc]init];
@@ -332,7 +339,7 @@
 //        }
 //    }
     
-    return  [self sendDataToAliyun:array topic:@"Clicks" semaphore:semaphore];
+    return  [self sendDataToAliyun:array topic:topic?:@"Clicks" semaphore:semaphore];
 }
 
 - (BOOL)sendDataToAliyun:(NSArray*)dataArray topic:(NSString*)topic semaphore:(dispatch_semaphore_t)semaphore{

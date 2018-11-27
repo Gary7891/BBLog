@@ -109,12 +109,19 @@ NSString * applicationDocumentsDirectory()
         RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
         config.fileURL = [NSURL URLWithString:filePath];
         config.readOnly = NO;
-        int currentVersion = 1.0;
+        int currentVersion = 2.0;
         config.schemaVersion = currentVersion;
         
         config.migrationBlock = ^(RLMMigration *migration , uint64_t oldSchemaVersion) {
-            // 这里是设置数据迁移的block
+            //如果从没迁移过，oldSchemaVersion == 0
             if (oldSchemaVersion < currentVersion) {
+                // The enumerateObjects:block: method iterates
+                // over every 'Person' object stored in the Realm file
+                [migration enumerateObjects:BBEventModel.className
+                                      block:^(RLMObject *oldObject, RLMObject *newObject) {
+                                          // 设置新增属性的值
+                                          newObject[@"topic"] = [NSString stringWithFormat:@"%@",@"Clicks"];
+                                      }];
             }
         };
         
@@ -630,6 +637,23 @@ void UncaughtExceptionHandler(NSException * exception)
     [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
 }
 
++(void)postEvent:(NSString *)eventId relatedData:(NSString*)data index:(NSString*)index topic:(NSString*)topic {
+    BBEventModel *eventModel = [[BBEventModel alloc] init];
+    eventModel.eventId = eventId;
+    eventModel.time = [[BBLogAgent sharedLogAgent] getCurrentTime].doubleValue;
+    eventModel.acc = 1;
+    eventModel.activityName = [[NSBundle mainBundle] bundleIdentifier];
+    eventModel.version = [[BBLogAgent sharedLogAgent] getVersion];
+    eventModel.descriptionString = @"";
+    eventModel.relatedData = data;
+    eventModel.index = index;
+    if (topic.length) {
+        eventModel.topic = topic;
+    }
+    eventModel.userToken = [BBLogAgent sharedLogAgent].configModel.accountId;
+    [[BBLogAgent sharedLogAgent] archiveEvent:eventModel];
+}
+
 +(void)postTag:(NSString *)tag
 {
     BBTagModel *tagModel = [[BBTagModel alloc] init];
@@ -673,11 +697,19 @@ void UncaughtExceptionHandler(NSException * exception)
         NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     
         RLMResults<BBEventModel*> *eventResults = [BBEventModel objectsWhere:@"time < %f",currentTime];
-        NSMutableArray *eventArray = [[NSMutableArray alloc]init];
+        NSMutableDictionary *eventMutalDic = [[NSMutableDictionary alloc]init];
         for (int i = 0; i < eventResults.count; i++) {
             BBEventModel *model = [eventResults objectAtIndex:i];
             NSDictionary *dic = model.toDictionary?:[[NSDictionary alloc]init];
-            [eventArray addObject:dic];
+            NSString *topicName = model.topic;
+            NSMutableArray *array = [eventMutalDic objectForKey:topicName];
+            if (array) {
+                [array addObject:dic];
+            }else {
+                NSMutableArray *eventArray = [[NSMutableArray alloc]init];
+                [eventArray addObject:dic];
+                [eventMutalDic setObject:eventArray forKey:topicName];
+            }
         }
         
         RLMResults<BBActivityModel*> *activitResult = [BBActivityModel objectsWhere:@"startMils < %f",currentTime];
@@ -712,14 +744,14 @@ void UncaughtExceptionHandler(NSException * exception)
             [tagArray addObject:dic];
         }
         
-        if([eventArray count]>0 || [activityLogArray count]>0 || [errorLogArray count]>0 || [clientDataArray count]>0 || [tagArray count]>0)
+        if([eventMutalDic count]>0 || [activityLogArray count]>0 || [errorLogArray count]>0 || [clientDataArray count]>0 || [tagArray count]>0)
         {
 //            NSMutableDictionary *dic_ = [[NSMutableDictionary alloc]init];
             NSMutableDictionary *requestDic = [[NSMutableDictionary alloc] init];
             
             [requestDic setObject:_appKey forKey:@"appkey"];
             
-            [requestDic setObject:eventArray forKey:@"eventArray"];
+            [requestDic setObject:eventMutalDic forKey:@"eventArray"];
             
             if([tagArray count]>0)
             {
